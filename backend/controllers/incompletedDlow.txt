@@ -1,0 +1,29 @@
+GET /organizations/:organizationId/projects
+                    ↓
+              AuthMiddleware
+                    ↓
+         userId + organizationId
+                    ↓
+       OrganizationMember.findOne()
+                    ↓
+              Member exists?
+               ↙          ↘
+             NO            YES
+             ↓              ↓
+            403          Check role
+                           ↙     ↘
+                       ADMIN      MEMBER
+                         ↓           ↓
+                Project.find()   ProjectMember.find()
+                {                 { userId }
+                  organizationId       ↓
+                }                 projectIds
+                         ↓             ↓
+                         │      Project.find({
+                         │        _id: {$in: projectIds},
+                         │        organizationId
+                         │      })
+                         ↓             ↓
+                         └──────┬──────┘
+                                ↓
+                         Return Projects
