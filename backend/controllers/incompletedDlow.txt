@@ -1,29 +1,28 @@
-GET /organizations/:organizationId/projects
+PATCH /api/projects/:projectId
+             ↓
+       AuthMiddleware
+             ↓
+      userId + projectId
+             ↓
+       Find Project
+             ↓
+      Project exists?
+        ↙          ↘
+      NO            YES
+      ↓              ↓
+     404      Get organizationId
                     ↓
-              AuthMiddleware
+          Check OrganizationMember
                     ↓
-         userId + organizationId
-                    ↓
-       OrganizationMember.findOne()
-                    ↓
-              Member exists?
-               ↙          ↘
-             NO            YES
-             ↓              ↓
-            403          Check role
-                           ↙     ↘
-                       ADMIN      MEMBER
-                         ↓           ↓
-                Project.find()   ProjectMember.find()
-                {                 { userId }
-                  organizationId       ↓
-                }                 projectIds
-                         ↓             ↓
-                         │      Project.find({
-                         │        _id: {$in: projectIds},
-                         │        organizationId
-                         │      })
-                         ↓             ↓
-                         └──────┬──────┘
-                                ↓
-                         Return Projects
+             role = admin?
+              ↙          ↘
+            NO            YES
+            ↓              ↓
+           403             ↓
+                    Get update data
+                         from body
+                            ↓
+                    Update Project
+                            ↓
+                    Return updated
+                       project

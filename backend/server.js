@@ -8,6 +8,7 @@ import OrganRouter from "./routes/organization.routes.js";
 import OrganMemberRouter from "./routes/organizationMember.routes.js";
 import ProjectRoute from "./routes/project.routes.js";
 import ProjectMemberRoutes from "./routes/projectMember.routes.js";
+import TaskRouter from "./routes/tasks.routes.js";
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 dotenv.config();
@@ -17,6 +18,7 @@ const app = express();
 const port = process.env.SERVER_PORT;
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api",TaskRouter)
 app.use("/api/organizations", OrganRouter);
 app.use("/api", ProjectRoute);
 app.use("/api/auth", authRouter);
