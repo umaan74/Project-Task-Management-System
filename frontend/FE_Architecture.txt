@@ -1,0 +1,32 @@
+                        FRONTEND
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+        PAGES         COMPONENTS        CONTEXTS
+          │                │                │
+     Full Screens       UI Blocks       Global State
+          │                │                │
+          └────────────────┼────────────────┘
+                           │
+                         HOOKS
+                           │
+                     Reusable Logic
+                           │
+                       SERVICES
+                           │
+                    API Communication
+                           │
+                           ▼
+                        BACKEND
+                           │
+                        MongoDB
+                        
+pages      → Kahan dikhana hai?
+components → Kya dikhana hai?
+contexts   → Kaunsi shared information?
+hooks      → Kaunsa reusable logic?
+services   → Backend se kaise baat karni?
+assets     → Images/icons kya hain?
+App.jsx    → App ka main structure
+main.jsx   → App start kahan se hoti hai?
+CSS        → App ka look kaisa hai?

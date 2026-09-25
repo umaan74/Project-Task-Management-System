@@ -9,7 +9,7 @@ PROJECT MANAGEMENT SYSTEM
 API ENDPOINTS - FINAL
 
 1. AUTHENTICATION
-----------------
+----------------     
 POST   /api/auth/register
        → New user registration
 

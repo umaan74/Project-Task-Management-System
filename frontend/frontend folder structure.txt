@@ -1,0 +1,147 @@
+frontend/
+│
+├── public/
+│
+├── src/
+│   │
+│   ├── assets/
+│   │   ├── logo.png
+│   │   └── ...
+│   │
+│   ├── components/
+│   │   │
+│   │   ├── common/
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── Loader.jsx
+│   │   │   └── ConfirmDialog.jsx
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── ProtectedLayout.jsx
+│   │   │
+│   │   ├── organization/
+│   │   │   ├── OrganizationCard.jsx
+│   │   │   ├── OrganizationList.jsx
+│   │   │   ├── CreateOrganization.jsx
+│   │   │   ├── JoinOrganization.jsx
+│   │   │   ├── MemberList.jsx
+│   │   │   └── MemberCard.jsx
+│   │   │
+│   │   ├── project/
+│   │   │   ├── ProjectCard.jsx
+│   │   │   ├── ProjectList.jsx
+│   │   │   ├── CreateProject.jsx
+│   │   │   ├── ProjectMembers.jsx
+│   │   │   ├── ProjectMemberCard.jsx
+│   │   │   └── AddProjectMember.jsx
+│   │   │
+│   │   └── task/
+│   │       ├── TaskCard.jsx
+│   │       ├── TaskList.jsx
+│   │       ├── CreateTask.jsx
+│   │       ├── TaskDetails.jsx
+│   │       ├── UpdateTask.jsx
+│   │       └── AssignTask.jsx
+│   │
+│   ├── contexts/
+│   │   ├── AuthContext.jsx
+│   │   └── OrganizationContext.jsx
+│   │
+│   ├── hooks/
+│   │   ├── useAuth.js
+│   │   └── useOrganization.js
+│   │
+│   ├── pages/
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── Organization.jsx
+│   │   ├── Project.jsx
+│   │   └── Task.jsx
+│   │
+│   ├── services/
+│   │   ├── api.js
+│   │   ├── authService.js
+│   │   ├── organizationService.js
+│   │   ├── projectService.js
+│   │   └── taskService.js
+│   │
+│   ├── App.jsx
+│   ├── main.jsx
+│   ├── index.css
+│   └── App.css
+│
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package.json
+├── package-lock.json
+└── README.md
+
+
+
+pages/
+
+Complete screens
+
+Login
+Register
+Dashboard
+Organization
+Project
+Task
+
+
+
+components/
+
+Pages ke andar use hone wale reusable UI pieces
+
+Organization → OrganizationCard
+Project      → ProjectCard
+Task         → TaskCard
+
+
+
+contexts/
+
+Global/shared state
+
+AuthContext
+    ↓
+Login user information
+
+OrganizationContext
+    ↓
+Currently selected organization
+hooks/
+
+Reusable React logic
+
+useAuth
+useOrganization
+
+
+
+services/
+
+Backend se communication
+
+authService
+    ↓
+Auth APIs
+
+organizationService
+    ↓
+Organization APIs
+
+projectService
+    ↓
+Project APIs
+
+taskService
+    ↓
+Task APIs
