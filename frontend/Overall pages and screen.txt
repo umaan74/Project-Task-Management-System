@@ -1,0 +1,59 @@
+Overall UI Screen Inventory
+🔐 A. Authentication — 2
+Login
+Register
+🏢 B. Organization — 7
+Organization Setup — Create/Join selection
+Create Organization
+Organization Created / Success + Invite Code
+Join Organization
+Successfully Joined
+Invalid Invite Code
+Already Member
+
+Ye 7 isliye hain kyunki design-wise ye different UI states/screens hain.
+
+📊 C. Dashboard — 3
+Admin Dashboard
+Member Dashboard
+Member Dashboard — No Projects Yet
+
+Admin/member layouts visibly different hain, aur no-project state separately designed hai.
+
+📁 D. Projects — 4
+Admin Projects
+Member Projects
+Admin Projects — Empty
+Member Projects — Empty
+
+Admin ko organization ke projects aur Create Project action milta hai; member ko only assigned projects.
+
+➕ E. Project Creation — 1
+Create Project
+📋 F. Project Details — 2
+Admin Project Details
+Member Project Details
+
+Dono same underlying page ho sakte hain, but design-wise separate layouts hain because admin/member actions visibly different hain.
+
+👥 G. Project Members — 1
+Add Project Member
+
+Project Details ke andar Admin ka + ADD MEMBER flow.
+
+✅ H. Task Creation — 1
+Create Task
+
+Project Details ke andar Admin ka + CREATE TASK flow.
+
+📝 I. Task Details — 2
+Admin Task Details
+Member Task Details
+
+Note: Ye dono humne conversation mein finalize kiye the, lekin uploaded 807-line file mein inka detailed layout actually included nahi hai. Isliye ye conversation-finalized design hain, file-defined screens nahi.
+
+👤 J. Profile — 2
+Profile Dropdown
+Profile Page
+
+Profile dropdown aur Profile page dono explicitly file mein present hain.

@@ -21,3 +21,4 @@ OrganRouter.patch("/:organizationId", AuthMiddleware, UpdateOrganization); // Up
 OrganRouter.delete("/:organizationId", AuthMiddleware, DeleteOrganization); // Delete
 
 export default OrganRouter;
+

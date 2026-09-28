@@ -1,0 +1,807 @@
+LOGIN
+                UMAN
+
+            Welcome Back
+       Login to your workspace
+
+
+Email
+┌─────────────────────────────────┐
+│ Enter your email                │
+└─────────────────────────────────┘
+
+
+Password
+┌─────────────────────────────────┐
+│ Enter your password          👁 │
+└─────────────────────────────────┘
+
+                    Forgot Password?
+
+┌─────────────────────────────────┐
+│              LOGIN              │
+└─────────────────────────────────┘
+
+
+       Don't have an account?
+             Create Account
+
+
+
+
+
+REGISTER 
+                 UMAN
+
+             Create Account
+        Create your workspace account
+
+
+Username
+┌─────────────────────────────────┐
+│ Enter your username             │
+└─────────────────────────────────┘
+
+
+Email
+┌─────────────────────────────────┐
+│ Enter your email                │
+└─────────────────────────────────┘
+
+
+Password
+┌─────────────────────────────────┐
+│ Create a password            👁 │
+└─────────────────────────────────┘
+
+
+Confirm Password
+┌─────────────────────────────────┐
+│ Confirm your password         👁 │
+└─────────────────────────────────┘
+
+
+┌─────────────────────────────────┐
+│          CREATE ACCOUNT         │
+└─────────────────────────────────┘
+
+
+       Already have an account?
+                  Login
+
+ORGANIZATION
+
+Organization Setup :
+
+Register
+   ↓
+Login
+   ↓
+Does user belong to an organization?
+   │
+   ├── NO → Organization Setup
+   │          ├── Create Organization
+   │          └── Join Organization
+   │
+   └── YES → Dashboard
+                         UMAN
+
+                 Set Up Your Workspace
+            Create or join an organization
+
+
+       ┌──────────────────────┐   ┌──────────────────────┐
+       │                      │   │                      │
+       │   CREATE             │   │   JOIN               │
+       │   ORGANIZATION       │   │   ORGANIZATION       │
+       │                      │   │                      │
+       │   Start a new        │   │   Join an existing    │
+       │   workspace          │   │   workspace           │
+       │                      │   │                      │
+       │   [ CREATE ]         │   │   [ JOIN ]            │
+       │                      │   │                      │
+       └──────────────────────┘   └──────────────────────┘
+
+1. CREATE ORGANIZATION
+
+User CREATE button dabata hai.
+
+Same page par cards ki jagah/create section open hoga:
+
+                         UMAN
+
+                  Create Organization
+
+
+              Organization Name
+
+       ┌─────────────────────────────────┐
+       │ Enter organization name         │
+       └─────────────────────────────────┘
+
+
+       ┌─────────────────────────────────┐
+       │       CREATE ORGANIZATION       │
+       └─────────────────────────────────┘
+
+                    ← Back
+
+Pehle ek Organization Created / Success screen dikhayein, jahan admin ko invite code mile.
+
+                         UMAN
+
+                 Organization Created
+
+
+                     ✓ Success
+
+
+                  NeuroX
+              Organization created
+
+
+              Invite Code
+
+       ┌─────────────────────────────────┐
+       │          NeuroXUAD9G       📋   │
+       └─────────────────────────────────┘
+
+       Share this code with your
+       team members to invite them.
+
+
+       ┌─────────────────────────────────┐
+       │        GO TO DASHBOARD          │
+       └─────────────────────────────────┘
+Yahan important hai:
+
+Admin ko Invite Code clearly dikhana hai, because isi code se members join karenge.
+
+Same page par Join form:
+
+                         UMAN
+
+                   Join Organization
+
+
+                    Invite Code
+
+       ┌─────────────────────────────────┐
+       │ Enter invite code              │
+       └─────────────────────────────────┘
+
+
+       ┌─────────────────────────────────┐
+       │        JOIN ORGANIZATION        │
+       └─────────────────────────────────┘
+
+                    ← Back
+
+Example:
+
+Invite Code
+[ NeuroXUAD9G]
+
+[ JOIN ORGANIZATION ]
+JOIN button dabane ke baad
+
+Backend invite code verify karega.
+
+Agar valid hai:
+
+                         UMAN
+
+                  Successfully Joined
+
+
+                        ✓
+
+                      NeuroX
+
+             You have joined this
+                organization.
+
+
+       ┌─────────────────────────────────┐
+       │          GO TO DASHBOARD        │
+       └─────────────────────────────────┘
+
+Join Organization
+        ↓
+Enter Invite Code
+        ↓
+JOIN
+        ↓
+Backend verifies code
+        ↓
+OrganizationMember created
+(role = member)
+        ↓
+Successfully Joined
+        ↓
+GO TO DASHBOARD
+
+
+3. Invalid Invite Code
+
+Agar code galat hai:
+
+Invite Code
+
+[ WRONGCODE123                ]
+
+⚠ Invalid invite code
+
+[ JOIN ORGANIZATION ]
+
+User isi page par rahega.
+
+4. Already Member
+
+Agar user already us organization ka member hai:
+
+⚠ You are already a member
+   of this organization.
+Toh COMPLETE ORGANIZATION FLOW
+                         LOGIN
+                           ↓
+                 ORGANIZATION SETUP
+                           ↓
+             ┌─────────────┴─────────────┐
+             ↓                           ↓
+          CREATE                        JOIN
+             ↓                           ↓
+    Organization Name              Invite Code
+             ↓                           ↓
+          CREATE                        JOIN
+             ↓                           ↓
+   Organization Created        Invite Code Verified
+             ↓                           ↓
+       Show Invite Code          Successfully Joined
+             ↓                           ↓
+      GO TO DASHBOARD            GO TO DASHBOARD
+             ↓                           ↓
+           ADMIN                       MEMBER
+
+Dashboard final direction
+
+1. ADMIN DASHBOARD
+Desktop
+┌─────────────────────────────────────────────────────┐
+│ UMAN                                  Uman ▼         │
+├──────────────┬──────────────────────────────────────┤
+│ Dashboard    │ Welcome back, Uman                   │
+│ Projects     │ Organization: NeuroX                │
+│ Tasks        │                                      │
+│ Members      │ [Projects] [Tasks] [Completed]       │
+│ Settings     │                                      │
+│ Logout       │ Recent Projects                      │
+│              │                                      │
+│              │ ┌─────────────────────────────────┐  │
+│              │ │ LegalEase          ACTIVE       │  │
+│              │ │ Due: 15 Oct                     │  │
+│              │ └─────────────────────────────────┘  │
+│              │                                      │
+│              │ ┌─────────────────────────────────┐  │
+│              │ │ RiskRadar          PLANNING     │  │
+│              │ │ Due: 25 Oct                     │  │
+│              │ └─────────────────────────────────┘  │
+│              │                                      │
+│              │ [+ CREATE PROJECT]                   │
+│              │ [MANAGE MEMBERS]                     │
+└──────────────┴──────────────────────────────────────┘
+Mobile — Admin
+┌──────────────────────────┐
+│ ☰  UMAN          Uman ▼ │
+├──────────────────────────┤
+│                          │
+│ Welcome back, Uman       │
+│ NeuroX • ADMIN           │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Projects             │ │
+│ │ 4                    │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Tasks                │ │
+│ │ 7                    │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Completed            │ │
+│ │ 3                    │ │
+│ └──────────────────────┘ │
+│                          │
+│ Recent Projects          │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ LegalEase            │ │
+│ │ ACTIVE               │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ RiskRadar            │ │
+│ │ PLANNING             │ │
+│ └──────────────────────┘ │
+│                          │
+│ [+ CREATE PROJECT]       │
+│ [MANAGE MEMBERS]         │
+└──────────────────────────┘
+2. MEMBER DASHBOARD
+Desktop
+┌─────────────────────────────────────────────────────┐
+│ UMAN                                  Bilal ▼        │
+├──────────────┬──────────────────────────────────────┤
+│ Dashboard    │ Welcome back, Bilal                  │
+│ Projects     │ Organization: NeuroX                │
+│ Tasks        │                                      │
+│ Members      │ [Projects] [My Tasks] [Completed]    │
+│ Settings     │                                      │
+│ Logout       │ Recent Projects                      │
+│              │                                      │
+│              │ ┌─────────────────────────────────┐  │
+│              │ │ LegalEase          ACTIVE       │  │
+│              │ │ Due: 15 Oct                     │  │
+│              │ └─────────────────────────────────┘  │
+│              │                                      │
+│              │ ┌─────────────────────────────────┐  │
+│              │ │ RiskRadar          PLANNING     │  │
+│              │ │ Due: 25 Oct                     │  │
+│              │ └─────────────────────────────────┘  │
+└──────────────┴──────────────────────────────────────┘
+Mobile — Member
+┌──────────────────────────┐
+│ ☰  UMAN         Bilal ▼ │
+├──────────────────────────┤
+│                          │
+│ Welcome back, Bilal      │
+│ NeuroX • MEMBER          │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Projects             │ │
+│ │ 3                    │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ My Tasks             │ │
+│ │ 5                    │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Completed            │ │
+│ │ 2                    │ │
+│ └──────────────────────┘ │
+│                          │
+│ Recent Projects          │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ LegalEase            │ │
+│ │ ACTIVE               │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ RiskRadar            │ │
+│ │ PLANNING             │ │
+│ └──────────────────────┘ │
+└──────────────────────────┘
+Page same rahega, bas role ke according components/actions ko render karna hai ya nahi, woh check karenge.
+
+Responsive rules jo hum throughout website follow karenge
+Desktop: sidebar + main content
+Tablet: collapsible/compact sidebar
+Mobile: hamburger menu
+Cards desktop par row mein, mobile par stack
+Tables ko mobile par blindly squeeze nahi karenge; zarurat par cards/list use karenge
+Forms mobile width ke according resize honge
+Buttons touch-friendly honge
+Text overflow nahi hone denge
+Modals mobile screen ke according adapt honge
+Navbar mobile par simplify hoga
+
+
+Member with no project
+
+Dashboard:
+
+┌──────────────────────────────────────┐
+│ Welcome back, Bilal                 │
+│ Organization: NeuroX • MEMBER       │
+│                                      │
+│ Projects: 0                          │
+│ My Tasks: 0                          │
+│ Completed: 0                         │
+│                                      │
+│          No Projects Yet             │
+│                                      │
+│   You haven't been added to any      │
+│   project yet.                       │
+│                                      │
+│   Projects will appear here when     │
+│   an admin adds you to one.          │
+└──────────────────────────────────────┘
+
+ADMIN — PROJECTS PAGE
+
+Flow:
+
+Dashboard
+   ↓
+[ Projects: 4 ]  ← click
+   ↓
+Projects Page
+   ↓
+Organization ke saare projects
+🖥️ Desktop — Admin
+┌───────────────────────────────────────────────────────────────┐
+│ UMAN                                           Uman ▼         │
+├──────────────┬────────────────────────────────────────────────┤
+│              │                                                │
+│ Dashboard    │  Projects                         [+ CREATE]    │
+│              │                                                │
+│ Projects     │  NeuroX Projects                               │
+│              │                                                │
+│ Tasks        │  ┌──────────────────┐  ┌──────────────────┐   │
+│              │  │ LegalEase        │  │ RiskRadar        │   │
+│ Members      │  │                  │  │                  │   │
+│              │  │ ACTIVE           │  │ PLANNING         │   │
+│ Settings     │  │                  │  │                  │   │
+│              │  │ Due: 30 Sep      │  │ Due: 15 Oct      │   │
+│ Logout       │  │                  │  │                  │   │
+│              │  │ [ VIEW PROJECT ] │  │ [ VIEW PROJECT ] │   │
+│              │  └──────────────────┘  └──────────────────┘   │
+│              │                                                │
+│              │  ┌──────────────────┐                          │
+│              │  │ E-Rupee          │                          │
+│              │  │                  │                          │
+│              │  │ COMPLETED        │                          │
+│              │  │ Due: 20 Sep      │                          │
+│              │  │                  │                          │
+│              │  │ [ VIEW PROJECT ] │                          │
+│              │  └──────────────────┘                          │
+└──────────────┴────────────────────────────────────────────────┘
+Admin ke liye important
+
+Top-right:
+
+[ + CREATE PROJECT ]
+
+Admin click karega → Create Project UI khulega.
+
+Har project card:
+
+Project Name
+Status
+Due Date
+[ VIEW PROJECT ]
+
+Project card par click bhi directly Project Page open kar sakta hai.
+
+📱 Mobile — Admin
+
+Desktop ka 2/3-column layout mobile par single-column cards ban jayega.
+
+┌──────────────────────────┐
+│ ☰  UMAN          Uman ▼ │
+├──────────────────────────┤
+│                          │
+│ Projects                │
+│ NeuroX Projects         │
+│                          │
+│ [+ CREATE PROJECT]       │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ LegalEase            │ │
+│ │                      │ │
+│ │ ACTIVE               │ │
+│ │ Due: 30 Sep          │ │
+│ │                      │ │
+│ │ [ VIEW PROJECT ]     │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ RiskRadar            │ │
+│ │                      │ │
+│ │ PLANNING             │ │
+│ │ Due: 15 Oct          │ │
+│ │                      │ │
+│ │ [ VIEW PROJECT ]     │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ E-Rupee              │ │
+│ │                      │ │
+│ │ COMPLETED            │ │
+│ │ Due: 20 Sep          │ │
+│ │                      │ │
+│ │ [ VIEW PROJECT ]     │ │
+│ └──────────────────────┘ │
+└──────────────────────────┘
+
+Empty state bhi rakhenge
+
+Agar admin ne abhi koi project create nahi kiya:
+
+        No Projects Yet
+
+Create your first project
+to start managing your team.
+
+      [+ CREATE PROJECT]
+
+MEMBER — PROJECTS PAGE
+
+Flow:
+
+Dashboard
+   ↓
+[ Projects: 3 ] ← click
+   ↓
+Projects Page
+   ↓
+Sirf woh projects
+jinmein member add kiya gaya hai
+🖥️ Desktop — Member
+┌───────────────────────────────────────────────────────────────┐
+│ UMAN                                          Bilal ▼         │
+├──────────────┬────────────────────────────────────────────────┤
+│              │                                                │
+│ Dashboard    │  My Projects                                   │
+│              │                                                │
+│ Projects     │  NeuroX                                        │
+│              │                                                │
+│ Tasks        │  ┌──────────────────┐  ┌──────────────────┐   │
+│              │  │ LegalEase        │  │ RiskRadar        │   │
+│ Members      │  │                  │  │                  │   │
+│              │  │ ACTIVE           │  │ PLANNING         │   │
+│ Settings     │  │                  │  │                  │   │
+│              │  │ Due: 30 Sep      │  │ Due: 15 Oct      │   │
+│ Logout       │  │                  │  │                  │   │
+│              │  │ [ VIEW PROJECT ] │  │ [ VIEW PROJECT ] │   │
+│              │  └──────────────────┘  └──────────────────┘   │
+│              │                                                │
+│              │  ┌──────────────────┐                          │
+│              │  │ Website Redesign │                          │
+│              │  │                  │                          │
+│              │  │ ACTIVE           │                          │
+│              │  │ Due: 25 Oct      │                          │
+│              │  │                  │                          │
+│              │  │ [ VIEW PROJECT ] │                          │
+│              │  └──────────────────┘                          │
+└──────────────┴────────────────────────────────────────────────┘
+
+Notice:
+
+Admin:
+Projects                         [+ CREATE PROJECT]
+
+Member:
+My Projects
+
+Member ke paas + CREATE PROJECT nahi hai.
+
+📱 Mobile — Member
+┌──────────────────────────┐
+│ ☰  UMAN         Bilal ▼ │
+├──────────────────────────┤
+│                          │
+│ My Projects              │
+│ NeuroX                   │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ LegalEase            │ │
+│ │                      │ │
+│ │ ACTIVE               │ │
+│ │ Due: 30 Sep          │ │
+│ │                      │ │
+│ │ [ VIEW PROJECT ]     │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ RiskRadar            │ │
+│ │                      │ │
+│ │ PLANNING             │ │
+│ │ Due: 15 Oct          │ │
+│ │                      │ │
+│ │ [ VIEW PROJECT ]     │ │
+│ └──────────────────────┘ │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Website Redesign     │ │
+│ │                      │ │
+│ │ ACTIVE               │ │
+│ │ Due: 25 Oct          │ │
+│ │                      │ │
+│ │ [ VIEW PROJECT ]     │ │
+│ └──────────────────────┘ │
+└──────────────────────────┘
+Member kisi project mein add nahi hua ho
+
+Ye case humne discuss kiya tha:
+
+┌───────────────────────────────┐
+│                               │
+│       No Projects Yet         │
+│                               │
+│ You haven't been added to     │
+│ any project yet.              │
+│                               │
+│ Projects will appear here     │
+│ when an admin adds you.       │
+│                               │
+└───────────────────────────────┘
+
+Admin — Desktop
+┌──────────────────────────────────────────────────────────────┐
+│ UMAN                                          Uman ▼        │
+├──────────────┬───────────────────────────────────────────────┤
+│ Dashboard    │ ← Back to Projects                            │
+│              │                                               │
+│ Projects     │ LegalEase                         [EDIT]      │
+│              │ ACTIVE                            [DELETE]    │
+│ Tasks        │                                               │
+│ Members      │ Build multilingual legal platform            │
+│              │                                               │
+│ Settings     │ Start Date: 10 Sep     Due: 30 Sep           │
+│              │                                               │
+│ Logout       │ ───────────────────────────────────────────   │
+│              │                                               │
+│              │ Project Members                [+ ADD MEMBER] │
+│              │                                               │
+│              │ Uman        ADMIN                             │
+│              │ Bilal       MEMBER                            │
+│              │ Asjad       MEMBER                            │
+│              │                                               │
+│              │ ───────────────────────────────────────────   │
+│              │                                               │
+│              │ Tasks                           [+ CREATE TASK]│
+│              │                                               │
+│              │ ┌─────────────────────────────────────────┐   │
+│              │ │ Implement Login Page                    │   │
+│              │ │ HIGH • IN-PROGRESS • Asjad              │   │
+│              │ └─────────────────────────────────────────┘   │
+│              │                                               │
+└──────────────┴───────────────────────────────────────────────┘
+Mobile — Admin
+┌──────────────────────────┐
+│ ☰  UMAN          Uman ▼ │
+├──────────────────────────┤
+│                          │
+│ ← Back to Projects       │
+│                          │
+│ LegalEase                │
+│ ACTIVE                   │
+│                          │
+│ Build multilingual      │
+│ legal platform          │
+│                          │
+│ Start: 10 Sep            │
+│ Due: 30 Sep              │
+│                          │
+│ [ EDIT PROJECT ]         │
+│ [ DELETE PROJECT ]       │
+│                          │
+│ Project Members          │
+│                          │
+│ [+ ADD MEMBER]           │
+│                          │
+│ Uman       ADMIN         │
+│ Bilal      MEMBER        │
+│ Asjad      MEMBER        │
+│                          │
+│ Tasks                    │
+│                          │
+│ [+ CREATE TASK]          │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Implement Login Page │ │
+│ │ HIGH                 │ │
+│ │ IN-PROGRESS          │ │
+│ │ Assigned: Asjad     │ │
+│ └──────────────────────┘ │
+└──────────────────────────┘
+
+My Projects
+    ↓
+LegalEase
+    ↓
+Project Details
+👤 MEMBER — Desktop
+┌──────────────────────────────────────────────────────────────┐
+│ UMAN                                          Bilal ▼       │
+├──────────────┬───────────────────────────────────────────────┤
+│ Dashboard    │ ← Back to Projects                            │
+│              │                                               │
+│ Projects     │ LegalEase                         ACTIVE      │
+│              │                                               │
+│ Tasks        │ Build multilingual legal platform            │
+│              │                                               │
+│ Members      │ Start Date: 10 Sep     Due: 30 Sep           │
+│              │                                               │
+│ Settings     │ ───────────────────────────────────────────   │
+│              │                                               │
+│ Logout       │ Project Members                              │
+│              │                                               │
+│              │ Uman        ADMIN                             │
+│              │ Bilal       MEMBER                            │
+│              │ Asjad       MEMBER                            │
+│              │                                               │
+│              │ ───────────────────────────────────────────   │
+│              │                                               │
+│              │ Tasks                                         │
+│              │                                               │
+│              │ ┌─────────────────────────────────────────┐   │
+│              │ │ Implement Login Page                    │   │
+│              │ │ HIGH • IN-PROGRESS • Bilal              │   │
+│              │ └─────────────────────────────────────────┘   │
+│              │                                               │
+└──────────────┴───────────────────────────────────────────────┘
+📱 Mobile — Member
+┌──────────────────────────┐
+│ ☰  UMAN         Bilal ▼ │
+├──────────────────────────┤
+│                          │
+│ ← Back to Projects       │
+│                          │
+│ LegalEase                │
+│ ACTIVE                   │
+│                          │
+│ Build multilingual      │
+│ legal platform          │
+│                          │
+│ Start: 10 Sep            │
+│ Due: 30 Sep              │
+│                          │
+│ Project Members          │
+│                          │
+│ Uman       ADMIN         │
+│ Bilal      MEMBER        │
+│ Asjad      MEMBER        │
+│                          │
+│ Tasks                    │
+│                          │
+│ ┌──────────────────────┐ │
+│ │ Implement Login Page │ │
+│ │ HIGH                 │ │
+│ │ IN-PROGRESS          │ │
+│ │ Assigned: Bilal     │ │
+│ │                      │ │
+│ │ [ UPDATE STATUS ]    │ │
+│ └──────────────────────┘ │
+│                          │
+└──────────────────────────┘
+
+Profile dropdown
+┌──────────────────────┐
+│ 👤 Uman              │
+│ uman@gmail.com       │
+│                      │
+│ Profile              │
+│ Settings             │
+│                      │
+│ ───────────────────  │
+│ Logout               │
+└──────────────────────┘
+Profile page
+
+Agar Profile click kare:
+
+┌──────────────────────────────────────┐
+│              Profile                 │
+│                                      │
+│             [ Avatar ]               │
+│                                      │
+│ Username                             │
+│ Uman                                 │
+│                                      │
+│ Email                                │
+│ uman@gmail.com                        │
+│                                      │
+│ Organization                         │
+│ NeuroX                               │
+│                                      │
+│ Role                                 │
+│ ADMIN                                │
+│                                      │
+│          [ EDIT PROFILE ]            │
+└──────────────────────────────────────┘
