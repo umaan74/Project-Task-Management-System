@@ -31,7 +31,7 @@ const Invalid_Code = () => {
             <p className="text-[11px] lg:text-[12px] text-red-500 font-semibold">Invalid invite code. Please check and try again</p>
           </div>
          <button className="button cursor-pointer w-full bg-blue-600 text-center text-[14px] py-2 mt-4 text-white rounded-md font-semibold">
-              JOIN ORGANIZATION
+              Try again
             </button>
     <div className="back text-center m-1">
 
