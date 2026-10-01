@@ -1,20 +1,12 @@
 import {
-  LayoutDashboard,
-  FolderKanban,
-  Bell,
-  Search,
-  Users,
-  Settings,
-  Menu,
-  X,
   Folder,
-  Plus,
   ListChecks,
   CircleCheckBig,
-  UserRoundGroup,
 } from "lucide-react";
-
+import Sidebar from "../components/layout/Sidebar";
 import { useState } from "react";
+import Navbar from "../components/layout/Navbar";
+import ProjectCard from "../components/project/Project-components/ProjectCard";
 
 const Member_Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,16 +14,16 @@ const Member_Dashboard = () => {
   return (
     <div className="Admin-Dashboard flex min-h-screen w-full">
       {/* SIDEBAR */}
-         <Sidebar
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
 
       {/* RIGHT PANEL */}
       <div className="right-panel w-full lg:w-[80%] min-w-0 bg-blue-50">
         {/* NAVBAR */}
-       <Navbar Page={"Dashboard"} setIsSidebarOpen={setIsSidebarOpen} />
-      </div>
+        <Navbar Page={"Dashboard"} setIsSidebarOpen={setIsSidebarOpen} />
+
 
         <div className="Welcome-Back-Panel  mt-4 flex justify-between items-center">
           <div className="left-panel w-[60%] ml-4">
@@ -87,20 +79,20 @@ const Member_Dashboard = () => {
           </div>
         </div>
 
-        <div className="Projects-Panel  mt-4 mx-5 my-2 ">
-        
-        <div className="title-text lg:flex lg:justify-between lg:items-center">
-             <div className="left-panel w-[70%] ml-4">
-            <h1 className="font-bold text-xl lg:text-2xl text-gray-600 mb-2 ">
-              Recent Projects
-            </h1> 
-          </div>
-         
-        </div>
+        <div className="Projects-Panel  mt-4 lg:mx-5 my-2 ">
 
-        <div className="Project-cards flex flex-wrap flex-col  lg:flex-row">
+          <div className="title-text lg:flex lg:justify-between lg:items-center">
+            <div className="left-panel w-[70%] ml-4">
+              <h1 className="font-bold text-xl lg:text-2xl text-gray-600 mb-2 ">
+                Recent Projects
+              </h1>
+            </div>
 
-              <div className="card border lg:w-[30%] border-gray-300 shadow bg-white rounded-2xl mt-5 mx-3 p-5 flex items-center">
+          </div>
+
+          <div className="Project-cards ">
+
+            {/* <div className="card border lg:w-[30%] border-gray-300 shadow bg-white rounded-2xl mt-5 mx-3 p-5 flex items-center">
             <div className="left-panel w-[90%]">
               <h1 className="lg:text-2xl font-bold">Legal Ease</h1>
               <h2 className="text-gray-600 lg:text-lg text-sm font-semibold mb-4">
@@ -144,11 +136,13 @@ const Member_Dashboard = () => {
                 ACTIVE
               </span>
             </div>
+          </div> */}
+            <ProjectCard />
           </div>
         </div>
       </div>
-       </div>
-    
+    </div>
+
   );
 };
 

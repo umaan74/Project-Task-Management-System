@@ -1,5 +1,5 @@
 import {Folder} from 'lucide-react'
-const No_Project = () => {
+const Member_No_Project = () => {
   return (
     <>
     
@@ -10,11 +10,11 @@ const No_Project = () => {
         </div>
 
         <h1 className="font-bold text-2xl m-2"> No Projects Yet</h1>
-        <p className="text-gray-500 font-semibold"> You haven't created any projects yet.</p>
-        <p className="text-gray-400">Projects will appear here when admin adds you to one </p>
+        <p className="text-gray-500 font-semibold"> You haven't been added to any projects yet.</p>
+        <p className="text-gray-400 pb-20">Projects will appear here when admin adds you to one </p>
 </div>
 </>
   )
 }
 
-export default No_Project
+export default Member_No_Project

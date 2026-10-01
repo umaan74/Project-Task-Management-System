@@ -2,9 +2,9 @@ import { useState } from "react";
 
 import { Folder, ListChecks, CircleCheckBig } from "lucide-react";
 
-import No_Project from "../common/No_Project";
-import Sidebar from "../layout/Sidebar";
-import Navbar from "../layout/Navbar";
+import No_Project from "../components/project/Project-components/Member_No_Project_component";
+import Sidebar from "../components/layout/Sidebar";
+import Navbar from "../components/layout/Navbar";
 
 const No_Project_Yet_Dashboard = () => {
   // Sidebar ka state

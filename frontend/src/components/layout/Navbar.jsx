@@ -11,7 +11,7 @@ const Navbar = ({ Page, setIsSidebarOpen }) => {
 
         {/* PAGE TITLE */}
 
-        <div className="font-bold lg:text-[20px]">{Page}</div>
+        <div className="font-bold text-lg lg:text-[24px]">{Page}</div>
 
         {/* SEARCH */}
 
