@@ -1,3 +1,4 @@
+import {Link} from "react-router"
 const Admin_Single_ProjectTasks_Members = () => {
   return (
     <div className="main-container flex lg:flex-row  flex-col">
@@ -32,17 +33,22 @@ const Admin_Single_ProjectTasks_Members = () => {
             + CREATE TASK
           </button>
         </div>
-        <div className="tasks my-2 flex bg-blue-50 rounded-2xl mx-2 py-1 justify-between items-center lg:px-10  px-5">
-          <div className="task-info flex justify-center gap-2 lg:gap-3 items-center">
+        <div className="tasks">
+         <div className="task  my-2 flex bg-blue-50 rounded-2xl mx-2 py-2 justify-around items-center   px-5 cursor-pointer">
+           <div  className="task-info flex justify-center gap-2 lg:gap-3 items-center">
+            <Link  to="/projects/123/tasks/456">
             <div className="text">
               <h2 className="font-bold lg:text-lg text-[14px]">Implement PDF extraction algorithm</h2>
               <p className="font-semibold text-[14px] lg:text-md text-gray-600">Assigned to Bilal.</p>
             </div>
+            </Link>
           </div>
           <div className="role">
             <span className="bg-yellow-100 text-yellow-400 text-[10px] lg:text-sm font-bold py-1 px-4 rounded-xl">
               IN PROGRESS
             </span>
+          </div>
+          
           </div>
           </div>
       </div>

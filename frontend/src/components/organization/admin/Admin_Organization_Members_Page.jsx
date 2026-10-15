@@ -2,6 +2,8 @@
 import { useState } from "react";
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
+import Admin_Change_Role_component from "../Organization-component/Admin_Change_Role_component";
+import Admin_Remove_Member from "../Organization-component/Admin_Remove_Member_component";
 
 const members = [
     {
@@ -32,7 +34,8 @@ const members = [
 
 const Admin_Organization_Members = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    const [isRemoveMemberOpen, setIsRemoveMember] = useState(false)
+    const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
     return (
         <div className="Admin-Dashboard flex min-h-screen w-full">
             {/* SIDEBAR */}
@@ -42,7 +45,7 @@ const Admin_Organization_Members = () => {
             />
 
             {/* RIGHT PANEL */}
-            <div className="right-panel w-full lg:w-[80%] min-w-0 bg-blue-50">
+            <div className="right-panel w-full lg:w-[80%] min-w-0  bg-blue-50">
                 {/* NAVBAR */}
                 <Navbar
                     Page={"Organization Members"}
@@ -50,6 +53,7 @@ const Admin_Organization_Members = () => {
                 />
 
                 {/* PAGE HEADING */}
+
                 <div className="Projects-heading mt-5 mx-5">
                     <div className="title-text">
                         <div className="ml-4">
@@ -69,7 +73,7 @@ const Admin_Organization_Members = () => {
 
                 {/* MEMBERS TABLE */}
                 <div className="mx-3 lg:mx-5 mt-6 mb-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <table className="w-full min-w-[850px] border-collapse text-left">
+                    <table className="w-full min-w-212.5 border-collapse text-left">
                         <thead className="bg-slate-50">
                             <tr className="border-b border-slate-200 text-xs font-semibold uppercase text-slate-600">
                                 <th className="px-6 py-4">Member</th>
@@ -108,8 +112,8 @@ const Admin_Organization_Members = () => {
                                     <td className="px-6 py-4">
                                         <span
                                             className={`rounded-md px-2.5 py-1 text-[11px] font-bold ${member.role === "ADMIN"
-                                                    ? "bg-blue-100 text-blue-600"
-                                                    : "bg-slate-200 text-slate-600"
+                                                ? "bg-blue-100 text-blue-600"
+                                                : "bg-slate-200 text-slate-600"
                                                 }`}
                                         >
                                             {member.role}
@@ -127,7 +131,8 @@ const Admin_Organization_Members = () => {
                                             <button
                                                 type="button"
                                                 onClick={() =>
-                                                    console.log("Change role:", member.id)
+
+                                                    setIsRoleModalOpen(true)
                                                 }
                                                 className="rounded-md cursor-pointer border border-blue-500 px-3 py-1.5 text-xs font-semibold text-blue-600 transition hover:bg-blue-50"
                                             >
@@ -138,7 +143,7 @@ const Admin_Organization_Members = () => {
                                                 <button
                                                     type="button"
                                                     onClick={() =>
-                                                        console.log("Remove member:", member.id)
+                                                        setIsRemoveMember(true)
                                                     }
                                                     className="rounded-md cursor-pointer border border-red-500 px-3 py-1.5 text-xs font-semibold text-red-500 transition hover:bg-red-50"
                                                 >
@@ -152,6 +157,19 @@ const Admin_Organization_Members = () => {
                         </tbody>
                     </table>
                 </div>
+                {isRoleModalOpen && (
+                    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/ch p-4">
+                        <Admin_Change_Role_component />
+                    </div>
+
+                )}
+
+                {isRemoveMemberOpen && (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4">
+        <Admin_Remove_Member />
+    </div>
+)}
+
             </div>
         </div>
     );

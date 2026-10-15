@@ -1,0 +1,9 @@
+3. In routes ka purpose
+URL	Page
+/setup-organization	Organization create ya join karne ka option
+/create-organization	Nayi organization banana
+/join-organization	Invite code se join karna
+/organization-created	Creation success page
+/organization-joined	Join success page
+/invalid-code	Invalid invite code
+/already-joined	User pehle se organization mein hai

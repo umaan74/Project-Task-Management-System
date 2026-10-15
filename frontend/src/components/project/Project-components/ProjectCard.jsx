@@ -1,4 +1,5 @@
 import { Calendar } from 'lucide-react'
+import {Link} from 'react-router'
 const ProjectCard = () => {
   return (
     <div className="Cards  flex flex-wrap flex-col  lg:flex-row">
@@ -20,9 +21,9 @@ const ProjectCard = () => {
           </div>
         </div>
         <div className="view-project m-2 mt-5">
-          <button className="border-2 cursor-pointer rounded-lg py-1 w-full font-semibold border-blue-700 text-blue-700">
+           <Link to="/projects/123" className="border-2 px-2 cursor-pointer rounded-lg py-1 w-full font-semibold border-blue-700 text-blue-700">
             View Project
-          </button>
+          </Link>
         </div>
       </div>
 

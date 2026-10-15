@@ -5,10 +5,15 @@ import Admin_Create_Project_component from "../Project-components/Admin_Create_P
 import { ArrowLeft } from 'lucide-react'
 import Admin_Single_Project_component from "../Project-components/Admin_Single_Project_component";
 import Admin_Single_ProjectTasks_Members from "../Project-components/Admin_Single_ProjectMembers&Tasks_component";
+import { useParams } from "react-router";
+import { Link } from 'react-router'
 import Admin_Inside_Task_component from "../Project-components/Admin_Inside_the_Task_component";
 import Member_Inside_Task_component from "../Project-components/Member_Inside_the_Task_component";
 const Member_Inside_Task = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { projectId, taskId } = useParams();
+
+    console.log(projectId, taskId);
     return (
         <>
             <div className="Admin-Dashboard flex min-h-screen w-full">
@@ -19,10 +24,13 @@ const Member_Inside_Task = () => {
 
                 <div className="right-panel  w-full lg:w-[80%] min-w-0 bg-blue-50">
                     <Navbar Page={"Projects"} setIsSidebarOpen={setIsSidebarOpen} />
-                    <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /> Back to Projects</button>
+                    <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /><Link to="/projects">
+                        Back to Projects
+                    </Link>
+                    </button>
 
-                    <Member_Inside_Task_component/>
-                
+                    <Member_Inside_Task_component />
+
 
                 </div>
             </div>

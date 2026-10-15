@@ -1,12 +1,15 @@
+import {Link} from 'react-router'
 import {
   LayoutDashboard,
   FolderKanban,
   Users,
   Settings,
   X,
+  UserPen
 } from "lucide-react";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const role="ADMIN"
   return (
     <div
       className={`
@@ -50,25 +53,29 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
         <div className="text-gray-700 pb-4 ml-5 mt-4 flex flex-col gap-4">
 
-          <a className="flex gap-3 font-bold py-1 text-lg" href="">
+          <Link className="flex gap-3 font-bold hover:bg-blue-200 rounded-lg px-3 py-2  text-lg" to="/dashboard">
             <LayoutDashboard />
             <span>Dashboard</span>
-          </a>
+          </Link>
 
-          <a className="flex gap-3 font-bold py-1 text-lg" href="">
+          <Link className="flex gap-3 font-bold hover:bg-blue-200 rounded-lg px-3 py-2  text-lg" to="/projects">
             <FolderKanban />
             <span>Projects</span>
-          </a>
+          </Link>
 
-          <a className="flex gap-3 font-bold py-1 text-lg" href="">
+          <Link className="flex gap-3 font-bold hover:bg-blue-200 rounded-lg px-3 py-2  text-lg" to="/members">
             <Users />
             <span>Members</span>
-          </a>
+          </Link>
 
-          <a className="flex gap-3 font-bold py-1 text-lg" href="">
+        {  role==="ADMIN"?<Link className="flex gap-3 font-bold hover:bg-blue-200 rounded-lg px-3 py-2  text-lg" to="/settings">
             <Settings />
             <span>Settings</span>
-          </a>
+          </Link>:null}
+          <Link className="flex gap-3 font-bold hover:bg-blue-200 rounded-lg px-3 py-2  text-lg" to="/profile">
+            <UserPen />
+            <span>Profile</span>
+          </Link>
 
         </div>
 

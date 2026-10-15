@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const Login = () => {
   return (
     <div className=" bg-blue-50 Login-Page flex min-h-screen items-center justify-center">
@@ -52,9 +54,9 @@ const Login = () => {
           </button>
           <p className="text-sm text-center lg-text-lg">
             Don't have an account? 
-             <a className="text-blue-800 font-semibold" href="/Register.jsx">
+             <Link to={"/register"} className="text-blue-800 font-semibold" href="/Register.jsx">
                Create Account
-            </a>
+            </Link>
           </p>
         </form>
       </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
 import { ArrowLeft } from "lucide-react";
-
+import {Link} from 'react-router'
 import Member_Single_Project_component from "../Project-components/Member_Single_Project_component";
 import Member_Single_ProjectTasks_Members from "../Project-components/Member_Single_ProjectMembers&Tasks_component";
 
@@ -28,9 +28,10 @@ const Member_In_Single_Project = () => {
         />
 
         {/* BACK BUTTON */}
-        <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1">
-          <ArrowLeft className="inline" /> Back to Projects
-        </button>
+         <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /><Link to="/projects">
+                     Back to Projects
+                    </Link>
+                     </button>
 
         {/* PROJECT DETAILS */}
         <Member_Single_Project_component />

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
+import { Link } from "react-router";
+
 import Admin_Create_Project_component from "../Project-components/Admin_Create_Project_component";
 import { ArrowLeft } from 'lucide-react'
 import Admin_Single_Project_component from "../Project-components/Admin_Single_Project_component";
@@ -18,7 +20,10 @@ const Admin_Inside_Task = () => {
 
                 <div className="right-panel  w-full lg:w-[80%] min-w-0 bg-blue-50">
                     <Navbar Page={"Projects"} setIsSidebarOpen={setIsSidebarOpen} />
-                    <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /> Back to Projects</button>
+                    <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /><Link to="/projects">
+                     Back to Projects
+                    </Link>
+                     </button>
 
                     <Admin_Inside_Task_component />
                 

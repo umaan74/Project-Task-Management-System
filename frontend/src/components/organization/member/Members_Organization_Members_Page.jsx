@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
+import Admin_Change_Role_component from "../Organization-component/Admin_Change_Role_component";
 
 const members = [
     {
@@ -30,7 +31,7 @@ const members = [
     },
 ];
 
-const Member_Organization_Members_Page = () => {
+const Member_Organization_Members = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
@@ -126,7 +127,7 @@ const Member_Organization_Members_Page = () => {
                                         <div className="flex items-center gap-2 whitespace-nowrap">
                                          
 
-                                           <p> No actions available</p>
+                                           <p className="text-gray-500 italic "> No actions available</p>
                                             
                                         </div>
                                     </td>
@@ -140,4 +141,4 @@ const Member_Organization_Members_Page = () => {
     );
 };
 
-export default Member_Organization_Members_Page;
+export default Member_Organization_Members;
