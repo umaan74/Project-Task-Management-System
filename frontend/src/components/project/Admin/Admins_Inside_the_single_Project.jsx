@@ -6,8 +6,10 @@ import { ArrowLeft } from 'lucide-react';
 import {Link} from 'react-router'
 import Admin_Single_Project_component from "../Project-components/Admin_Single_Project_component";
 import Admin_Single_ProjectTasks_Members from "../Project-components/Admin_Single_ProjectMembers&Tasks_component";
+import Admin_Edit_Project_component from "../Project-components/Admin_Edit_Project_component.jsx";
 const Admin_In_Single_Project = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     return (
         <>
             <div className="Admin-Dashboard flex min-h-screen w-full">
@@ -18,7 +20,7 @@ const Admin_In_Single_Project = () => {
 
                 <div className="right-panel  w-full lg:w-[80%] min-w-0 bg-blue-50">
                     <Navbar Page={"Projects"} setIsSidebarOpen={setIsSidebarOpen} />
-                     <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /><Link to="/projects/123">
+                     <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /><Link to="/projects">
                      Back to Projects
                     </Link>
                      </button>

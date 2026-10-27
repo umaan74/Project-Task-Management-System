@@ -7,9 +7,13 @@ import Session from "../models/session.model.js";
 export async function Register(req, res) {
   const { username, email, password } = req.body;
 
-  const isUserExist = await User.findOne({
-    $or: [{ username }, { email }],
-  });
+  console.log("Received:", { username, email });
+
+const isUserExist = await User.findOne({
+  $or: [{ username }, { email }],
+});
+
+console.log("Matched user:", isUserExist);
   if (isUserExist) {
     return res.json("User Already Exist !");
   }

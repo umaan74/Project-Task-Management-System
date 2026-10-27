@@ -19,16 +19,16 @@ const Login = () => {
         </div>
 
         <form className="input-field">
-          <div className="email">
-            <label htmlFor="email" className="font-semibold">
-              Email
+          <div className="username">
+            <label htmlFor="username" className="font-semibold">
+              Username
             </label>
             <br />
             <input
               type="text"
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               className="border outline-0 border-gray-300 my-1 rounded-lg p-2 w-full"
-              id="email"
+              id="username"
             />
           </div>
           <div className="password my-2">
@@ -43,11 +43,11 @@ const Login = () => {
               id="password-2"
             />
           </div>
-          <div className="forgot-pass flex justify-end text-blue-400 text-sm">
+          {/* <div className="forgot-pass flex justify-end text-blue-400 text-sm">
           <a href="">
               Forgot Password?
             </a>
-          </div>    
+          </div>     */}
 
           <button className="button cursor-pointer w-full bg-blue-500 text-center py-3 my-4 text-white rounded-xl font-semibold">
             Login

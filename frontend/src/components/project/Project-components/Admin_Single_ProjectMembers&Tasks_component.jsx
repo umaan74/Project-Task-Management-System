@@ -5,9 +5,11 @@ const Admin_Single_ProjectTasks_Members = () => {
       <div className="Project-panel border w-full border-gray-200 rounded-2xl bg-white m-6 lg:w-2/5">
         <div className="head flex justify-evenly my-2 lg:my-0 lg:px-10 px-2 items-center">
           <h1 className="font-bold text-[14px] lg:text-xl">Project Members</h1>
-          <button className=" px-5 cursor-pointer lg:text-[14px] font-semibold rounded-lg lg:my-6 mx-6 bg-blue-700 text-white text-[10px] py-1 m-1">
+        <Link to={"/project/add-members"}>
+        <button  className=" px-5 cursor-pointer lg:text-[14px] font-semibold rounded-lg lg:my-6 mx-6 bg-blue-700 text-white text-[10px] py-1 m-1">
             + ADD MEMBER
           </button>
+        </Link>
         </div>
         <div className="members my-2 flex justify-between items-center lg:px-6  px-5">
           <div className="user-info flex justify-center gap-2 lg:gap-3 items-center">
@@ -29,9 +31,11 @@ const Admin_Single_ProjectTasks_Members = () => {
       <div className="Tasks-panel border w-full border-gray-200 rounded-2xl bg-white m-6 lg:w-3/5">
          <div className="head flex mx-3 justify-between my-2 lg:my-0 lg:px-10 px-2 items-center">
           <h1 className="font-bold text-[14px] lg:text-xl">Tasks</h1>
+         <Link to={"/project/create-task"}>
           <button className=" px-5 cursor-pointer lg:text-[14px] font-semibold rounded-lg lg:my-6 mx-6 bg-blue-700 text-white text-[10px] py-1 m-1">
             + CREATE TASK
           </button>
+         </Link>
         </div>
         <div className="tasks">
          <div className="task  my-2 flex bg-blue-50 rounded-2xl mx-2 py-2 justify-around items-center   px-5 cursor-pointer">

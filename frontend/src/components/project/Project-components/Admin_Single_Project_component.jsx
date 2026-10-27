@@ -1,8 +1,11 @@
+import { useState } from "react";
+import Admin_Edit_Project_component from "../Project-components/Admin_Edit_Project_component.jsx";
 const Admin_Single_Project_component = () => {
+    const [isEditOpen, setIsEditOpen] = useState(false);
     return (
         <>
-          
-             <div className="single-project-card rounded-2xl border bg-white border-gray-200 shadow-2xl mx-4">
+
+            <div className="single-project-card rounded-2xl border bg-white border-gray-200 shadow-2xl mx-4">
 
                 <div className="heading flex justify-center items-center w-full">
                     <div className="text-panel w-1/2 lg:px-10 px-5">
@@ -14,7 +17,7 @@ const Admin_Single_Project_component = () => {
                     </div>
                     <div className="button-panel w-1/2">
                         <div className="buttons font-bold flex justify-center lg:flex-row items-center my-2 flex-col gap-2  ">
-                            <button className="w-1/2 px-2 cursor-pointer lg:text-lg rounded-lg my-2 lg:my-6 mx-6 bg-white border-2 border-blue-700 text-[12px]  text-blue-700 py-2">
+                            <button className="w-1/2 px-2 cursor-pointer lg:text-lg rounded-lg lg:my-6 mx-6 bg-blue-500 text-white text-[12px] py-2" onClick={() => setIsEditOpen(true)}>
                                 EDIT PROJECT
                             </button>
                             <button className="w-1/2 px-2 cursor-pointer lg:text-lg rounded-lg lg:my-6 mx-6 bg-red-500 text-white text-[12px] py-2">
@@ -34,6 +37,16 @@ const Admin_Single_Project_component = () => {
 
                 </div>
             </div>
+            {isEditOpen && (
+                <Admin_Edit_Project_component
+                    project={project}
+                    onClose={() => setIsEditOpen(false)}
+                    onSave={(updatedProject) => {
+                        console.log(updatedProject);
+                        setIsEditOpen(false);
+                    }}
+                />
+            )}
         </>
     )
 }

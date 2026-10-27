@@ -23,8 +23,11 @@ import Admin_Organization_Settings from "./components/organization/admin/Admin_O
 import Edit_Profile from './components/Profile/Edit_Profile.jsx'
 import Profile_Page from './components/Profile/profile_page.jsx'
 import Change_Password from './components/Profile/Password_change.jsx'
+import Admin_Add_Project_Member from "./components/project/Admin/Admin_Add_Project_Member.jsx";
+import Admin_Create_Task from "./components/project/Admin/Admin_Create_Task.jsx";
+
 function App() {
-  const role = "ADMIN";
+  const role = "ADMI";
   return (<>
 
     <Routes>
@@ -69,18 +72,25 @@ function App() {
         }
       />
       <Route path="/members" element={
-        role==='ADMIN'?<Admin_Organization_Members/>:<Member_Organization_Members/>
-      }/>
+        role === 'ADMIN' ? <Admin_Organization_Members /> : <Member_Organization_Members />
+      } />
 
       <Route path="/settings" element={
-        role==="ADMIN"?<Admin_Organization_Settings/>:null
-      }/>
+        role === "ADMIN" ? <Admin_Organization_Settings /> : null
+      } />
       <Route path="/profile" element={
-      <Profile_Page/>}/>
+        <Profile_Page />} />
       <Route path="/profile/edit" element={
-      <Edit_Profile/>}/>
+        <Edit_Profile />} />
       <Route path="/profile/change-password" element={
-      <Change_Password/>}/>
+        <Change_Password />} />
+
+      <Route path="/project/add-members"
+        element={
+          role === "ADMIN" ? <Admin_Add_Project_Member /> : null} />
+      <Route path="/project/create-task"
+        element={
+          role === "ADMIN" ? <Admin_Create_Task /> : null} />
     </Routes>
   </>
   );

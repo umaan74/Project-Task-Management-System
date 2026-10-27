@@ -9,12 +9,16 @@ import OrganMemberRouter from "./routes/organizationMember.routes.js";
 import ProjectRoute from "./routes/project.routes.js";
 import ProjectMemberRoutes from "./routes/projectMember.routes.js";
 import TaskRouter from "./routes/tasks.routes.js";
+import cors from "cors";
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 dotenv.config();
 ConnectDB();
-
 const app = express();
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 const port = process.env.SERVER_PORT;
 app.use(express.json());
 app.use(cookieParser());

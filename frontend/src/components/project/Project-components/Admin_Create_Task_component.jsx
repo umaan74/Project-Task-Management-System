@@ -1,8 +1,8 @@
 
 const Admin_Create_Task_component = () => {
     return (<>
-        <div className=" mx-4 lg:mx-20 bg-white border border-gray-200 lg:p-8 p-5 rounded-2xl shadow-2xl">
-            <div className="Projects-heading mt-5 ">
+        <div className=" mx-4 lg:mx-20 bg-white border border-gray-200 lg:p-6 p-5 rounded-2xl shadow-2xl">
+            <div className="Projects-heading  ">
                 <div className="title-text  lg:flex lg:justify-between lg:items-center">
                     <div className="left-panel  ml-4">
                         <h1 className="font-bold text-2xl lg:text-3xl  mb-1 ">
@@ -39,7 +39,10 @@ const Admin_Create_Task_component = () => {
                     <div className="Task">
                         <label htmlFor="Project-Task" className=" font-bold text-gray-800"> PRIORITY</label>
                         <select name="Task" className=" w-full border outline-0 border-gray-200 my-2 rounded-lg px-2 py-1" id="Project-Task" >
-                            <option value="">Select a project member</option>
+                            <option value="">Select Priority</option>
+                            <option value="">High</option>
+                            <option value="">Low </option>
+                            <option value="">Normal</option>
                           
                         </select>
                     </div>
@@ -67,10 +70,10 @@ const Admin_Create_Task_component = () => {
                 </div>
 
                 <div className="buttons font-bold mt-8 flex justify-center lg:flex-row items-center flex-col gap-2  ">
-                    <button className="w-1/2 rounded-lg my-2  lg:my-6 mx-6 bg-blue-700 text-white py-2">
+                    <button className="w-1/2 cursor-pointer rounded-lg my-2  lg:my-6 mx-6 bg-blue-700 text-white py-2">
                         CREATE TASK
                     </button>
-                    <button className="w-1/2 rounded-lg lg:my-6 mx-6 bg-white text-blue-700 border-2 border-b-blue-700 py-2">
+                    <button className="w-1/2 cursor-pointer rounded-lg lg:my-6 mx-6 bg-white text-blue-700 border-2 border-b-blue-700 py-2">
                         CANCEL
                     </button>
 
