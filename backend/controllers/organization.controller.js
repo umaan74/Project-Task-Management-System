@@ -24,6 +24,7 @@ export async function CreateOrganization(req, res) {
 
     res.status(201).json({
       message: "Organization Created Successfully",
+      NewOrganization,
     });
   } catch (error) {
     res.status(500).json({
@@ -34,26 +35,16 @@ export async function CreateOrganization(req, res) {
 }
 
 export async function GetOrganizations(req, res) {
-  const userId = req.user.userId; //Authmiddleware se mil jaata hai user id
+    const userId = req.user.userId;
 
-  const In_how_many_organization_this_user_is = await OrganizationMember.find({
-    userId,
-  });
-  const organizationIds = In_how_many_organization_this_user_is.map(
-    (member) => {
-      return member.organizationId;
-    },
-  );
-  const No_of_Organizations = await Organization.find({
-    _id: {
-      $in: organizationIds,
-    },
-  });
+    const Organizations = await OrganizationMember.find({
+        userId,
+    }).populate("organizationId");
 
-  res.json({
-    message: "Working",
-    No_of_Organizations,
-  });
+    res.json({
+        message: "Organizations found successfully",
+        No_of_Organizations: Organizations,
+    });
 }
 
 export async function GetOrganization(req, res) {
@@ -110,7 +101,6 @@ export async function UpdateOrganization(req, res) {
   }
 }
 
-
 export async function DeleteOrganization(req, res) {
   const user = req.user.userId;
   const which_Organization = req.params.organizationId;
@@ -133,11 +123,11 @@ export async function DeleteOrganization(req, res) {
     });
 
     if (!OrganizationFound) {
-     return res.json({
-        message:"Organization does not found"
-      })
+      return res.json({
+        message: "Organization does not found",
+      });
     }
-    await OrganizationFound.deleteOne()
+    await OrganizationFound.deleteOne();
     res.status(200).json({
       message: `Organization Deleted Successfully`,
     });

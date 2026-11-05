@@ -30,10 +30,11 @@ export async function JoinOrganization(req, res) {
     role: "member",
   });
 
-  res.status(201).json({
+res.status(201).json({
     message: "User joined Successfully in the Organization",
     NewMember,
-  });
+    OrganizationName: findOrganization.name,
+});
 }
 
 export async function GetOrganizationMembers(req, res) {
