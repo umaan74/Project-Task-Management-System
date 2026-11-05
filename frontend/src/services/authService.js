@@ -1,28 +1,21 @@
 
 import { API_URL } from "./api";
 
-
-// Golden rule: Jab bhi kisi API ko browser ki cookies send karni ho ya response mein cookies receive karni ho, credentials: "include" use karo.
-// Register User
+// REGISTER USER
 export async function registerUser(username, email, password) {
   const response = await fetch(`${API_URL}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      username,
-      email,
-      password,
-    }),
+    body: JSON.stringify({ username, email, password }),
   });
 
   const data = await response.json();
-
   return { response, data };
 }
 
-// Login User
+// LOGIN USER
 export async function loginUser(username, password) {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
@@ -30,18 +23,14 @@ export async function loginUser(username, password) {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({
-      username,
-      password,
-    }),
+    body: JSON.stringify({ username, password }),
   });
 
   const data = await response.json();
-
   return { response, data };
 }
 
-// Refresh Access Token
+// REFRESH ACCESS TOKEN
 export async function refreshToken() {
   const response = await fetch(`${API_URL}/auth/refresh`, {
     method: "POST",
@@ -49,11 +38,23 @@ export async function refreshToken() {
   });
 
   const data = await response.json();
-
   return { response, data };
 }
 
-// Logout User
+// GET CURRENT LOGGED-IN USER
+export async function getCurrentUser(token) {
+  const response = await fetch(`${API_URL}/auth/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+  return { response, data };
+}
+
+// LOGOUT USER
 export async function logoutUser() {
   const response = await fetch(`${API_URL}/auth/logout`, {
     method: "POST",
@@ -61,11 +62,10 @@ export async function logoutUser() {
   });
 
   const data = await response.json();
-
   return { response, data };
 }
 
-// Logout From All Devices
+// LOGOUT FROM ALL DEVICES
 export async function logoutAll() {
   const response = await fetch(`${API_URL}/auth/logout-all`, {
     method: "POST",
@@ -73,6 +73,5 @@ export async function logoutAll() {
   });
 
   const data = await response.json();
-
   return { response, data };
 }

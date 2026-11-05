@@ -1,18 +1,34 @@
-import express from 'express';
-import { AuthMiddleware } from '../middleware/auth.middleware.js';
-import { AssignTask, CreateTask, DeleteTask, GetProjectTasks, GetTask, UpdateTask } from '../controllers/tasks.controller.js';
+import express from "express";
 
-const TaskRouter=express.Router();
+import { AuthMiddleware } from "../middleware/auth.middleware.js";
 
-TaskRouter.post("/projects/:projectId/tasks",AuthMiddleware,CreateTask)
+import {
+  AssignTask,
+  CreateTask,
+  DeleteTask,
+  GetProjectTasks,
+  GetTask,
+  UpdateTask,
+} from "../controllers/tasks.controller.js";
 
-TaskRouter.get("/projects/:projectId/tasks",AuthMiddleware,GetProjectTasks)
+const TaskRouter = express.Router();
 
-TaskRouter.get("/tasks/:taskId",AuthMiddleware,GetTask);
+// Create task
+TaskRouter.post("/projects/:projectId/tasks", AuthMiddleware, CreateTask);
 
-TaskRouter.patch("/tasks/:taskId",AuthMiddleware,UpdateTask)
+// Get all tasks of a project
+TaskRouter.get("/projects/:projectId/tasks", AuthMiddleware, GetProjectTasks);
 
-TaskRouter.patch("/tasks/:taskId/assign",AuthMiddleware,AssignTask)
+// Get single task
+TaskRouter.get("/tasks/:taskId", AuthMiddleware, GetTask);
 
-TaskRouter.delete("/tasks/:taskId",AuthMiddleware,DeleteTask)
+// Update task status
+TaskRouter.patch("/tasks/:taskId", AuthMiddleware, UpdateTask);
+
+// Assign task to another project member
+TaskRouter.patch("/tasks/:taskId/assign", AuthMiddleware, AssignTask);
+
+// Delete task
+TaskRouter.delete("/tasks/:taskId", AuthMiddleware, DeleteTask);
+
 export default TaskRouter;

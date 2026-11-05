@@ -1,41 +1,58 @@
+
 import { useState } from "react";
+import { Link, useParams } from "react-router";
+import { ArrowLeft } from "lucide-react";
+
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
-import Admin_Create_Project_component from "../Project-components/Admin_Create_Project_component";
-import { ArrowLeft } from 'lucide-react'
-import Admin_Single_Project_component from "../Project-components/Admin_Single_Project_component";
-import Admin_Single_ProjectTasks_Members from "../Project-components/Admin_Single_ProjectMembers&Tasks_component";
-import { useParams } from "react-router";
-import { Link } from 'react-router'
-import Admin_Inside_Task_component from "../Project-components/Admin_Inside_the_Task_component";
+
 import Member_Inside_Task_component from "../Project-components/Member_Inside_the_Task_component";
+
 const Member_Inside_Task = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const { projectId, taskId } = useParams();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    console.log(projectId, taskId);
-    return (
-        <>
-            <div className="Admin-Dashboard flex min-h-screen w-full">
-                <Sidebar
-                    isSidebarOpen={isSidebarOpen}
-                    setIsSidebarOpen={setIsSidebarOpen}
-                />
+  const { projectId, taskId } = useParams();
 
-                <div className="right-panel  w-full lg:w-[80%] min-w-0 bg-blue-50">
-                    <Navbar Page={"Projects"} setIsSidebarOpen={setIsSidebarOpen} />
-                    <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /><Link to="/projects">
-                        Back to Projects
-                    </Link>
-                    </button>
+  return (
+    <div className="Admin-Dashboard flex min-h-screen w-full">
 
-                    <Member_Inside_Task_component />
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
 
+      <div className="right-panel w-full min-w-0 bg-blue-50 lg:w-[80%]">
 
-                </div>
-            </div>
-        </>
-    );
+        <Navbar
+          Page={"My Projects"}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+
+        {/* Back Button */}
+        <div className="m-3">
+          <Link
+            to={projectId ? `/projects/${projectId}` : "/projects"}
+            className="inline-flex items-center rounded-md bg-blue-700 px-3 py-2 font-semibold text-white hover:bg-blue-800"
+          >
+            <ArrowLeft size={18} className="mr-1" />
+            Back to Project
+          </Link>
+        </div>
+
+        {projectId && taskId ? (
+          <Member_Inside_Task_component
+            projectId={projectId}
+            taskId={taskId}
+          />
+        ) : (
+          <div className="m-5 rounded-xl bg-red-50 p-5 text-red-600">
+            Invalid Project or Task ID.
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
 };
 
 export default Member_Inside_Task;

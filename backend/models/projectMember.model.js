@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 const ProjectMemberSchema = new mongoose.Schema(
@@ -7,26 +8,40 @@ const ProjectMemberSchema = new mongoose.Schema(
       ref: "Project",
       required: true,
     },
+
     userId: {
-      required: true,
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      unique: true,
+      required: true,
     },
+
     assignedBy: {
-      required: true,
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    assignedAt: {
       required: true,
+    },
+
+    assignedAt: {
       type: Date,
+      required: true,
+      default: Date.now,
     },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const ProjectMember = mongoose.model("ProjectMember", ProjectMemberSchema);
+// Same user can join multiple projects,
+// but cannot be added twice to the same project.
+ProjectMemberSchema.index(
+  { projectId: 1, userId: 1 },
+  { unique: true }
+);
+
+const ProjectMember = mongoose.model(
+  "ProjectMember",
+  ProjectMemberSchema
+);
+
 export default ProjectMember;

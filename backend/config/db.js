@@ -1,21 +1,20 @@
-import mongoose from 'mongoose';
 
-async function ConnectDB(){
-    try {
-       await mongoose.connect(process.env.MONGODB_URI);
-        console.log("Database Connected Successfuly")
-    } catch (error) {
-        console.log("Database Not Connected !\nSomething Went Wrong");
-        console.log(error.message);
+import mongoose from "mongoose";
+
+async function ConnectDB() {
+  try {
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI is missing in environment variables");
     }
 
-    //   mongoose
-    // .connect(process.env.MONGODB_URI)
-    // .then(() => {
-    //   console.log("Database Connected Successfuly");
-    // })
-    // .catch(() => {
-    //   console.log("Database Not Connected !\nSomething Went Wrong");
-    // });
+    await mongoose.connect(process.env.MONGODB_URI);
+
+    console.log("Database Connected Successfully");
+
+  } catch (error) {
+    console.error("Database Connection Failed:", error.message);
+    throw error;
+  }
 }
+
 export default ConnectDB;

@@ -1,20 +1,33 @@
-import { Folder } from 'lucide-react'
-const Admin_No_Project_component = () => {
-    return (
-        <>
 
-            <div className="No-Projects text-center  w-full border flex flex-col justify-center items-center border-gray-300 shadow bg-white p-20 rounded-4xl mt-4">
+import { FolderPlus } from "lucide-react";
+import { Link } from "react-router";
 
-                <div className="icon lg:p-5 ">
-                    <Folder className="bg-blue-100 text-blue-400 p-2 w-18 h-15 rounded-full" />
-                </div>
+const Admin_No_Project = ({ organizationName = "your organization" }) => {
+  return (
+    <div className="No-Projects mt-4 flex w-full flex-col items-center justify-center rounded-2xl border border-gray-300 bg-white p-8 text-center shadow sm:p-12 lg:p-20">
 
-                <h1 className="font-bold lg:text-2xl text-xl m-2"> No Projects Yet</h1>
-                <p className="text-gray-500 pb-20 font-semibold"> Create your first Project to start managing your team.</p>
-               
-            </div>
-        </>
-    )
-}
+      <div className="icon lg:p-5">
+        <FolderPlus className="h-16 w-16 rounded-full bg-blue-100 p-3 text-blue-500" />
+      </div>
 
-export default Admin_No_Project_component
+      <h1 className="m-2 text-xl font-bold lg:text-2xl">
+        No Projects Yet
+      </h1>
+
+      <p className="max-w-md font-semibold text-gray-500">
+        Create your first project in {organizationName} to start managing your team.
+      </p>
+
+      <Link
+        to="/project/create"
+        className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white transition hover:bg-blue-800"
+      >
+        <span className="text-xl">+</span>
+        Create Your First Project
+      </Link>
+
+    </div>
+  );
+};
+
+export default Admin_No_Project;

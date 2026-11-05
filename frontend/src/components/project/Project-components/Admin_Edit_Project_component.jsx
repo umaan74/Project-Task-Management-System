@@ -1,28 +1,22 @@
 
 import { useState } from "react";
 import { X, CalendarDays } from "lucide-react";
-const project = {
-    name: "Legal Ease",
-    workspace: "Neurox Workspace",
-    status: "ACTIVE",
-    description: "Project's Description Lorem ipsum, dolor sit amet consectetur adipisicing elit.",
-    startDate: "2025-09-01",
-    dueDate: "2025-09-01",
-};
 
-function Admin_Edit_Project_component({
-  project = {
-    name: "Legal Ease",
-    workspace: "Neurox Workspace",
-    status: "ACTIVE",
-    description: "",
-    startDate: "2025-09-01",
-    dueDate: "2025-09-01",
-  },
-  onClose,
-  onSave,
-}) {
-  const [formData, setFormData] = useState({ ...project });
+function Admin_Edit_Project_component({ project, onClose, onSave }) {
+  const [formData, setFormData] = useState({
+    name: project?.name || "",
+    status: project?.status || "planning",
+    description: project?.description || "",
+    startDate: project?.startDate
+      ? new Date(project.startDate).toISOString().slice(0, 10)
+      : "",
+    dueDate: project?.dueDate
+      ? new Date(project.dueDate).toISOString().slice(0, 10)
+      : "",
+  });
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +27,33 @@ function Admin_Edit_Project_component({
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (onSave) {
-      onSave(formData);
+    if (
+      formData.startDate &&
+      formData.dueDate &&
+      formData.dueDate < formData.startDate
+    ) {
+      setError("Due date cannot be earlier than start date.");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      await onSave({
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        status: formData.status,
+        startDate: formData.startDate || null,
+        dueDate: formData.dueDate || null,
+      });
+    } catch (err) {
+      setError(err.message || "Unable to update project.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -47,6 +63,7 @@ function Admin_Edit_Project_component({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 p-4">
       <div className="my-auto w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
+
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-5 sm:px-8">
           <div>
@@ -70,20 +87,20 @@ function Admin_Edit_Project_component({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5 p-6 sm:p-8">
-          {/* Project Name */}
+
           <div>
             <label
-              htmlFor="name"
+              htmlFor="edit-project-name"
               className="mb-2 block text-sm font-semibold text-gray-700"
             >
               Project Name *
             </label>
 
             <input
-              id="name"
+              id="edit-project-name"
               name="name"
               type="text"
-              value={formData.name || ""}
+              value={formData.name}
               onChange={handleChange}
               required
               maxLength={100}
@@ -92,63 +109,43 @@ function Admin_Edit_Project_component({
             />
           </div>
 
-          {/* Workspace */}
-          <div>
-            <label
-              htmlFor="workspace"
-              className="mb-2 block text-sm font-semibold text-gray-700"
-            >
-              Workspace *
-            </label>
-
-            <input
-              id="workspace"
-              name="workspace"
-              type="text"
-              value={formData.workspace || ""}
-              onChange={handleChange}
-              required
-              className={inputClass}
-              placeholder="Enter workspace name"
-            />
-          </div>
-
           {/* Status */}
           <div>
             <label
-              htmlFor="status"
+              htmlFor="edit-project-status"
               className="mb-2 block text-sm font-semibold text-gray-700"
             >
               Project Status
             </label>
 
             <select
-              id="status"
+              id="edit-project-status"
               name="status"
-              value={formData.status || "ACTIVE"}
+              value={formData.status}
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="ACTIVE">Active</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="ON_HOLD">On Hold</option>
+              <option value="planning">Planning</option>
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+              <option value="on-hold">On Hold</option>
             </select>
           </div>
 
           {/* Description */}
           <div>
             <label
-              htmlFor="description"
+              htmlFor="edit-project-description"
               className="mb-2 block text-sm font-semibold text-gray-700"
             >
               Project Description
             </label>
 
             <textarea
-              id="description"
+              id="edit-project-description"
               name="description"
               rows={4}
-              value={formData.description || ""}
+              value={formData.description}
               onChange={handleChange}
               maxLength={2000}
               className={`${inputClass} resize-y`}
@@ -156,7 +153,7 @@ function Admin_Edit_Project_component({
             />
 
             <p className="mt-1 text-right text-xs text-gray-400">
-              {(formData.description || "").length}/2000
+              {formData.description.length}/2000
             </p>
           </div>
 
@@ -164,61 +161,67 @@ function Admin_Edit_Project_component({
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label
-                htmlFor="startDate"
+                htmlFor="edit-project-start-date"
                 className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-700"
               >
                 <CalendarDays size={16} />
-                Start Date *
+                Start Date
               </label>
 
               <input
-                id="startDate"
+                id="edit-project-start-date"
                 name="startDate"
                 type="date"
-                value={formData.startDate || ""}
+                value={formData.startDate}
                 onChange={handleChange}
-                required
                 className={inputClass}
               />
             </div>
 
             <div>
               <label
-                htmlFor="dueDate"
+                htmlFor="edit-project-due-date"
                 className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-700"
               >
                 <CalendarDays size={16} />
-                Due Date *
+                Due Date
               </label>
 
               <input
-                id="dueDate"
+                id="edit-project-due-date"
                 name="dueDate"
                 type="date"
                 min={formData.startDate || undefined}
-                value={formData.dueDate || ""}
+                value={formData.dueDate}
                 onChange={handleChange}
-                required
                 className={inputClass}
               />
             </div>
           </div>
+
+          {error && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+              {error}
+            </div>
+          )}
 
           {/* Footer */}
           <div className="flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition hover:bg-gray-100"
+              disabled={isSaving}
+              className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition hover:bg-gray-100 disabled:opacity-50"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800"
+              disabled={isSaving}
+              className="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Save Changes
+              {isSaving ? "SAVING..." : "SAVE CHANGES"}
             </button>
           </div>
         </form>

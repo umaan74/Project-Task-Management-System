@@ -67,44 +67,61 @@ export async function CreateTask(req, res) {
   }
 }
 
+
 export async function GetProjectTasks(req, res) {
   try {
     const userId = req.user.userId;
     const projectId = req.params.projectId;
 
-    const Project_Exist = await Project.findOne({
-      _id: projectId,
-    });
+    // Check project exists
+    const project = await Project.findById(projectId);
 
-    if (!Project_Exist) {
+    if (!project) {
       return res.status(404).json({
-        message: "Project Not found",
+        message: "Project not found",
       });
     }
 
-    const requested_user_isProjectMember = await ProjectMember.findOne({
-      projectId: projectId,
-      userId: userId,
+    // Check if requester is organization admin
+    const isOrganizationAdmin = await OrganizationMember.findOne({
+      organizationId: project.organizationId,
+      userId,
+      role: "admin",
     });
 
-    if (!requested_user_isProjectMember) {
-      return res.status(403).json({
-        messsage: "The requested user is not a member of this Project",
-      });
-    }
-
-    const Tasks_Ids = await Task.find({
+    // Check if requester is project member
+    const isProjectMember = await ProjectMember.findOne({
       projectId,
+      userId,
     });
-    const All_Tasks = Tasks_Ids.map((t) => {
-      return t.title;
-    });
-    res.json({
-      message: "Fetched all Tasks Successfully",
+
+    // Allow admin OR project member
+    if (!isOrganizationAdmin && !isProjectMember) {
+      return res.status(403).json({
+        message: "You are not authorized to view these tasks",
+      });
+    }
+
+    // Fetch complete task objects
+    const All_Tasks = await Task.find({
+      projectId,
+    })
+      .populate("assignedTo", "name email")
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "All project tasks fetched successfully",
       All_Tasks,
     });
+
   } catch (error) {
-    res.json(error);
+    console.error("GetProjectTasks Error:", error);
+
+    return res.status(500).json({
+      message: "Failed to fetch project tasks",
+      error: error.message,
+    });
   }
 }
 

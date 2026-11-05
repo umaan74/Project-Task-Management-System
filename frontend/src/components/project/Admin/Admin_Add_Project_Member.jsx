@@ -1,44 +1,60 @@
+
 import { useState } from "react";
+import { Link, useParams } from "react-router";
+import { ArrowLeft } from "lucide-react";
+
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
-import Admin_Create_Project_component from "../Project-components/Admin_Create_Project_component";
-import {Link} from 'react-router'
-import { ArrowLeft } from 'lucide-react'
-import Admin_Single_Project_component from "../Project-components/Admin_Single_Project_component";
-import Admin_Single_ProjectTasks_Members from "../Project-components/Admin_Single_ProjectMembers&Tasks_component";
+
 import Admin_Add_Project_Member_component from "../Project-components/Admin_Add_Project_Member_component";
+
 const Admin_Add_Project_Member = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    return (
-        <>
-            <div className="Admin-Dashboard flex min-h-screen w-full">
-                <Sidebar
-                    isSidebarOpen={isSidebarOpen}
-                    setIsSidebarOpen={setIsSidebarOpen}
-                />
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-                <div className="right-panel  w-full lg:w-[80%] min-w-0 bg-blue-50">
-                    <Navbar Page={"Projects"} setIsSidebarOpen={setIsSidebarOpen} />
+  const { projectId } = useParams();
 
-                    <div className="Projects-heading mt-5 mx-5">
-                        <div className="title-text  lg:flex lg:justify-between lg:items-center">
-                            <div className="left-panel w-[70%] ml-4">
-                                <h1 className="font-bold text-2xl lg:text-3xl  mb-1 ">
-                                    Add Project Member
-                                </h1>
-                                <p className="text-gray-600 font-semibold">Add people to the LegalEase Team.</p>
-                            </div>
+  return (
+    <div className="Admin-Dashboard flex min-h-screen w-full">
 
-                        </div>
-                    </div>
-  <Link to={"/projects/:projectId"}>
-                       <button className="bg-blue-700 cursor-pointer text-white px-3 rounded-md m-3 font-semibold py-1"><ArrowLeft className="inline" /> Back to Projects</button>
-                     </Link>
-                    <Admin_Add_Project_Member_component className=""/>
-                </div>
-            </div>
-        </>
-    );
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
+
+      <div className="right-panel min-w-0 w-full bg-blue-50 lg:w-[80%]">
+
+        <Navbar
+          Page={"Projects"}
+          setIsSidebarOpen={setIsSidebarOpen}
+        />
+
+        <div className="mx-5 mt-5">
+
+          <h1 className="mb-1 text-2xl font-bold lg:text-3xl">
+            Add Project Member
+          </h1>
+
+          <p className="font-semibold text-gray-600">
+            Add existing members of your organization to this project.
+          </p>
+
+        </div>
+
+        <Link
+          to={`/projects/${projectId}`}
+          className="m-5 inline-flex items-center gap-2 rounded-md bg-blue-700 px-4 py-2 font-semibold text-white hover:bg-blue-800"
+        >
+          <ArrowLeft size={18} />
+          Back to Project
+        </Link>
+
+        <Admin_Add_Project_Member_component
+          projectId={projectId}
+        />
+
+      </div>
+    </div>
+  );
 };
 
 export default Admin_Add_Project_Member;

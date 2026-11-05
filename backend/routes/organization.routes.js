@@ -1,5 +1,8 @@
+
 import express from "express";
+
 import { AuthMiddleware } from "../middleware/auth.middleware.js";
+
 import {
   CreateOrganization,
   GetOrganizations,
@@ -10,15 +13,39 @@ import {
 
 const OrganRouter = express.Router();
 
-OrganRouter.post("/", AuthMiddleware, CreateOrganization); // Create Organization
+// Create Organization
+OrganRouter.post(
+  "/",
+  AuthMiddleware,
+  CreateOrganization
+);
 
-OrganRouter.get("/", AuthMiddleware, GetOrganizations); // See all user's Organizations
+// Get all user's Organizations
+OrganRouter.get(
+  "/",
+  AuthMiddleware,
+  GetOrganizations
+);
 
-OrganRouter.get("/:organizationId", AuthMiddleware, GetOrganization); // See one Organization
+// Get single Organization
+OrganRouter.get(
+  "/:organizationId",
+  AuthMiddleware,
+  GetOrganization
+);
 
-OrganRouter.patch("/:organizationId", AuthMiddleware, UpdateOrganization); // Update
+// Update Organization
+OrganRouter.patch(
+  "/:organizationId",
+  AuthMiddleware,
+  UpdateOrganization
+);
 
-OrganRouter.delete("/:organizationId", AuthMiddleware, DeleteOrganization); // Delete
+// Delete Organization
+OrganRouter.delete(
+  "/:organizationId",
+  AuthMiddleware,
+  DeleteOrganization
+);
 
 export default OrganRouter;
-
