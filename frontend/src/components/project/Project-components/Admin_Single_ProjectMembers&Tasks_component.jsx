@@ -3,7 +3,10 @@ import { useState, useEffect, useContext, useCallback } from "react";
 import { Link } from "react-router";
 
 import { AuthContext } from "../../../contexts/AuthContext";
-import { getProjectMembers } from "../../../services/projectMemberService";
+import {
+  getProjectMembers,
+  removeProjectMember,
+} from "../../../services/projectMemberService";
 import { getProjectTasks } from "../../../services/taskService";
 
 const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
@@ -13,6 +16,7 @@ const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [removingId, setRemovingId] = useState("");
 
   const loadProjectData = useCallback(async () => {
     if (!projectId || !AccessToken) return;
@@ -49,7 +53,11 @@ const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
         taskResult.data.Project_Tasks ||
         [];
 
-      setMembers(Array.isArray(memberList) ? memberList : []);
+      setMembers(
+        Array.isArray(memberList)
+          ? memberList.filter((member) => member?.userId)
+          : []
+      );
       setTasks(Array.isArray(taskList) ? taskList : []);
     } catch (err) {
       console.error("Project members/tasks error:", err);
@@ -71,12 +79,44 @@ const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
   const getUserName = (member) => {
     if (typeof member === "string") return `User ${member.slice(-6)}`;
     return (
+      member?.userId?.username ||
+      member?.username ||
       member?.name ||
       member?.userId?.name ||
       member?.email ||
       member?.userId?.email ||
       `User ${getUserId(member).slice(-6)}`
     );
+  };
+
+  const handleRemoveMember = async (member) => {
+    const user = member?.userId;
+    if (!user?._id) return;
+
+    if (!window.confirm(`Remove ${user.username || user.email} from this project?`)) {
+      return;
+    }
+
+    try {
+      setRemovingId(user._id);
+      setError("");
+
+      const { response, data } = await removeProjectMember(
+        projectId,
+        user._id,
+        AccessToken
+      );
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to remove project member.");
+      }
+
+      await loadProjectData();
+    } catch (err) {
+      setError(err.message || "Unable to remove project member.");
+    } finally {
+      setRemovingId("");
+    }
   };
 
   const getAssigneeName = (task) => {
@@ -90,6 +130,7 @@ const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
     }
 
     return (
+      assignedTo.username ||
       assignedTo.name ||
       assignedTo.email ||
       `User ${(assignedTo._id || "").slice(-6)}`
@@ -149,12 +190,12 @@ const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
           <div className="flex items-center gap-3">
 
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700">
-              {user?.username?.charAt(0)?.toUpperCase() || "U"}
+              {getUserName(member).charAt(0).toUpperCase() || "U"}
             </div>
 
             <div>
               <h2 className="font-semibold text-gray-800">
-  {user?.username || "Unknown User"}
+  {getUserName(member)}
 </h2>
 
               <p className="text-sm text-gray-500">
@@ -164,9 +205,14 @@ const Admin_Single_ProjectTasks_Members = ({ projectId }) => {
 
           </div>
 
-          <span className="rounded-xl bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
-            MEMBER
-          </span>
+          <button
+            type="button"
+            onClick={() => handleRemoveMember(member)}
+            disabled={removingId === user?._id}
+            className="rounded-lg border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+          >
+            {removingId === user?._id ? "REMOVING..." : "REMOVE"}
+          </button>
 
         </div>
       );

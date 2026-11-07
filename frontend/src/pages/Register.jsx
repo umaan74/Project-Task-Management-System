@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { API_URL } from "../services/api";
-import { registerUser } from "../services/authService";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Register = () => {
     const navigate = useNavigate();
+    const { Register: register } = useContext(AuthContext);
 
     const [message, setmessage] = useState("");
     const [loading, setloading] = useState(false);
@@ -27,19 +28,18 @@ const Register = () => {
         try {
             setloading(true);
 
-            const { response, data }=await registerUser(username,email,password)
+            const result = await register(username, email, password);
 
-            if (!response.ok) {
-                setmessage(data.message || "Registration failed!");
+            if (!result.ok) {
+                setmessage(result.message || "Registration failed!");
                 return;
             }
 
             form.reset();
-            alert("Account created successfully");
-           navigate("/setup-organization");
+            navigate("/setup-organization");
 
         } catch (error) {
-            setmessage("Can't connect to the server!");
+            setmessage(error.message || "Can't connect to the server!");
         } finally {
             setloading(false);
         }

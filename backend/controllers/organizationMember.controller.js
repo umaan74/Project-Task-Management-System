@@ -1,7 +1,10 @@
 
+import mongoose from "mongoose";
 import Organization from "../models/organization.model.js";
 import OrganizationMember from "../models/organizationMember.model.js";
 import ProjectMember from "../models/projectMember.model.js";
+import Project from "../models/project.model.js";
+import Task from "../models/task.model.js";
 
 // JOIN ORGANIZATION
 export async function JoinOrganization(req, res) {
@@ -67,6 +70,10 @@ export async function GetOrganizationMembers(req, res) {
     const userId = req.user.userId;
     const organizationId = req.params.organizationId;
 
+    if (!mongoose.isValidObjectId(organizationId)) {
+      return res.status(400).json({ message: "Invalid organization ID" });
+    }
+
     const requester = await OrganizationMember.findOne({
       userId,
       organizationId,
@@ -74,34 +81,33 @@ export async function GetOrganizationMembers(req, res) {
 
     if (!requester) {
       return res.status(403).json({
-        message: "Permission denied. User is not in this Organization",
+        message: "You are not a member of this organization",
       });
     }
 
-    const members = await OrganizationMember.find({
+    const organizationMembers = await OrganizationMember.find({
       organizationId,
-    }).populate("userId", "username email");
+    })
+      .populate("userId", "username email")
+      .sort({ createdAt: 1 });
 
-    const AllMember_of_Organization = members
-      .filter((member) => member.userId)
-      .map((member) => ({
-        _id: member.userId._id,
-        username: member.userId.username,
-        email: member.userId.email,
-        role: member.role,
-      }));
+    const validMembers = organizationMembers.filter(
+      (member) => member.userId !== null
+    );
+
+    const organization = await Organization.findById(organizationId);
 
     return res.status(200).json({
-      message: "Members fetched successfully",
-      AllMember_of_Organization,
+      message: "Organization members fetched successfully",
+      OrganizationName: organization?.name || "Organization",
+      TotalMembers: validMembers.length,
+      AllMember_of_Organization: validMembers,
     });
-
   } catch (error) {
-    console.error("GetOrganizationMembers:", error);
+    console.error("GetOrganizationMembers Error:", error);
 
     return res.status(500).json({
-      message: "Unable to fetch organization members",
-      error: error.message,
+      message: "Failed to fetch organization members",
     });
   }
 }
@@ -116,6 +122,13 @@ export async function ChangeMemberRole(req, res) {
     const organizationId = req.params.organizationId;
     const targetedUserId = req.params.userId;
     const { role: NewRole } = req.body;
+
+    if (
+      !mongoose.isValidObjectId(organizationId) ||
+      !mongoose.isValidObjectId(targetedUserId)
+    ) {
+      return res.status(400).json({ message: "Invalid organization or user ID" });
+    }
 
     const requesterIsAdmin = await OrganizationMember.findOne({
       userId,
@@ -192,6 +205,13 @@ export async function RemoveOrganizationMember(req, res) {
     const organizationId = req.params.organizationId;
     const targetedUserId = req.params.userId;
 
+    if (
+      !mongoose.isValidObjectId(organizationId) ||
+      !mongoose.isValidObjectId(targetedUserId)
+    ) {
+      return res.status(400).json({ message: "Invalid organization or user ID" });
+    }
+
     const requesterIsAdmin = await OrganizationMember.findOne({
       userId,
       organizationId,
@@ -236,34 +256,26 @@ export async function RemoveOrganizationMember(req, res) {
       }
     }
 
-    await targetedUser.deleteOne();
-
-    // Remove the user's project memberships in this organization
-    const organizationProjects = await ProjectMember.distinct("projectId", {
-      userId: targetedUserId,
-    });
-
-    if (organizationProjects.length > 0) {
-      const Project = (await import("../models/project.model.js")).default;
-
-      const projectsInOrganization = await Project.find({
-        _id: { $in: organizationProjects },
-        organizationId,
-      }).select("_id");
-
-      const projectIds = projectsInOrganization.map(
-        (project) => project._id
+    const projectIds = await Project.distinct("_id", { organizationId });
+    if (projectIds.length) {
+      await Task.updateMany(
+        {
+          projectId: { $in: projectIds },
+          assignedTo: targetedUserId,
+        },
+        { $set: { assignedTo: null } }
       );
-
       await ProjectMember.deleteMany({
         userId: targetedUserId,
         projectId: { $in: projectIds },
       });
     }
 
+    await targetedUser.deleteOne();
+
     const remainingMembers = await OrganizationMember.find({
       organizationId,
-    }).populate("userId", "name email");
+    }).populate("userId", "username email");
 
     const AllMember_of_Organization = remainingMembers.map((member) => ({
       userId: member.userId,

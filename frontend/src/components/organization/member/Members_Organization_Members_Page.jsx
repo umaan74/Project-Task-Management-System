@@ -1,38 +1,75 @@
 
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import Navbar from "../../layout/Navbar";
 import Sidebar from "../../layout/Sidebar";
-import Admin_Change_Role_component from "../Organization-component/Admin_Change_Role_component";
-
-const members = [
-    {
-        id: 1,
-        initial: "U",
-        name: "Uman K.",
-        email: "uman@example.com",
-        role: "ADMIN",
-        joinedDate: "01 Sep 2025",
-    },
-    {
-        id: 2,
-        initial: "B",
-        name: "Bilal A.",
-        email: "bilal@example.com",
-        role: "MEMBER",
-        joinedDate: "05 Sep 2025",
-    },
-    {
-        id: 3,
-        initial: "A",
-        name: "Asjad N.",
-        email: "asjad@example.com",
-        role: "MEMBER",
-        joinedDate: "10 Sep 2025",
-    },
-];
+import { AuthContext } from "../../../contexts/AuthContext";
+import { OrganizationContext } from "../../../contexts/OrganizationContext";
+import { getOrganizationMembers } from "../../../services/organizationMemberService";
 
 const Member_Organization_Members = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [members, setMembers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [reloadKey, setReloadKey] = useState(0);
+    const { AccessToken } = useContext(AuthContext);
+    const { SelectedOrganization } = useContext(OrganizationContext);
+    const organization = SelectedOrganization?.organizationId;
+    const organizationId = organization?._id;
+
+    useEffect(() => {
+        let mounted = true;
+
+        async function loadMembers() {
+            if (!organizationId || !AccessToken) {
+                setMembers([]);
+                setIsLoading(false);
+                return;
+            }
+
+            setIsLoading(true);
+            setError("");
+
+            try {
+                const { response, data } = await getOrganizationMembers(
+                    organizationId,
+                    AccessToken
+                );
+
+                if (!response.ok) {
+                    throw new Error(data.message || "Unable to load organization members.");
+                }
+
+                if (mounted) {
+                    setMembers(
+                        (data.AllMember_of_Organization || []).filter(
+                            (member) => member?.userId?._id
+                        )
+                    );
+                }
+            } catch (loadError) {
+                if (mounted) {
+                    setError(loadError.message || "Unable to load organization members.");
+                }
+            } finally {
+                if (mounted) setIsLoading(false);
+            }
+        }
+
+        loadMembers();
+        return () => {
+            mounted = false;
+        };
+    }, [organizationId, AccessToken, reloadKey]);
+
+    const formatDate = (date) => {
+        if (!date) return "—";
+        return new Date(date).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
 
     return (
         <div className="Admin-Dashboard flex min-h-screen w-full">
@@ -59,9 +96,9 @@ const Member_Organization_Members = () => {
                             </h1>
 
                             <h2 className="text-sm text-gray-700">
-                                NeuroX
+                                {organization?.name || "Organization"}
                                 <span className="text-gray-600 font-semibold">
-                                    {" "}· 3 Members
+                                    {" "}· {members.length} Members
                                 </span>
                             </h2>
                         </div>
@@ -70,7 +107,23 @@ const Member_Organization_Members = () => {
 
                 {/* MEMBERS TABLE */}
                 <div className="mx-3 lg:mx-5 mt-6 mb-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <table className="w-full min-w-[850px] border-collapse text-left">
+                    {isLoading ? (
+                        <p className="p-8 text-center text-gray-500">Loading organization members...</p>
+                    ) : error ? (
+                        <div className="p-8 text-center">
+                            <p className="mb-3 text-red-600">{error}</p>
+                            <button
+                                type="button"
+                                onClick={() => setReloadKey((key) => key + 1)}
+                                className="rounded-lg bg-blue-600 px-5 py-2 text-white"
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    ) : members.length === 0 ? (
+                        <p className="p-8 text-center text-gray-500">No organization members found.</p>
+                    ) : (
+                    <table className="w-full min-w-212.5 border-collapse text-left">
                         <thead className="bg-slate-50">
                             <tr className="border-b border-slate-200 text-xs font-semibold uppercase text-slate-600">
                                 <th className="px-6 py-4">Member</th>
@@ -84,42 +137,42 @@ const Member_Organization_Members = () => {
                         <tbody>
                             {members.map((member) => (
                                 <tr
-                                    key={member.id}
+                                    key={member._id}
                                     className="border-b border-slate-200 last:border-b-0"
                                 >
                                     {/* MEMBER */}
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600">
-                                                {member.initial}
+                                                {member.userId.username?.charAt(0)?.toUpperCase() || "U"}
                                             </div>
 
                                             <span className="whitespace-nowrap text-sm font-semibold text-slate-900">
-                                                {member.name}
+                                                {member.userId.username}
                                             </span>
                                         </div>
                                     </td>
 
                                     {/* EMAIL */}
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                                        {member.email}
+                                        {member.userId.email}
                                     </td>
 
                                     {/* ROLE */}
                                     <td className="px-6 py-4">
                                         <span
-                                            className={`rounded-md px-2.5 py-1 text-[11px] font-bold ${member.role === "ADMIN"
+                                            className={`rounded-md px-2.5 py-1 text-[11px] font-bold ${member.role === "admin"
                                                     ? "bg-blue-100 text-blue-600"
                                                     : "bg-slate-200 text-slate-600"
                                                 }`}
                                         >
-                                            {member.role}
+                                            {member.role.toUpperCase()}
                                         </span>
                                     </td>
 
                                     {/* JOINED DATE */}
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
-                                        {member.joinedDate}
+                                        {formatDate(member.createdAt)}
                                     </td>
 
                                     {/* ACTIONS */}
@@ -127,7 +180,7 @@ const Member_Organization_Members = () => {
                                         <div className="flex items-center gap-2 whitespace-nowrap">
                                          
 
-                                           <p className="text-gray-500 italic "> No actions available</p>
+                                           <p className="text-gray-500 italic">No actions available</p>
                                             
                                         </div>
                                     </td>
@@ -135,6 +188,7 @@ const Member_Organization_Members = () => {
                             ))}
                         </tbody>
                     </table>
+                    )}
                 </div>
             </div>
         </div>

@@ -174,6 +174,7 @@ function Admin_Edit_Project_component({ project, onClose, onSave }) {
                 type="date"
                 value={formData.startDate}
                 onChange={handleChange}
+                required
                 className={inputClass}
               />
             </div>
@@ -194,6 +195,7 @@ function Admin_Edit_Project_component({ project, onClose, onSave }) {
                 min={formData.startDate || undefined}
                 value={formData.dueDate}
                 onChange={handleChange}
+                required
                 className={inputClass}
               />
             </div>

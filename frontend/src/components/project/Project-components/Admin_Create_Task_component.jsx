@@ -83,6 +83,8 @@ const Admin_Create_Task_component = ({ projectId }) => {
 
     return (
       member?.name ||
+      member?.username ||
+      member?.userId?.username ||
       member?.userId?.name ||
       member?.email ||
       member?.userId?.email ||

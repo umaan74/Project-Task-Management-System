@@ -37,7 +37,7 @@ export async function getProjects(organizationId, token) {
 
 // 3. GET SINGLE PROJECT
 export async function getSingleProject(projectId, token) {
-  const response = await fetch(`${API_URL}/${projectId}`, {
+  const response = await fetch(`${API_URL}/projects/${projectId}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -50,7 +50,7 @@ export async function getSingleProject(projectId, token) {
 
 // 4. UPDATE PROJECT
 export async function updateProject(projectId, projectData, token) {
-  const response = await fetch(`${API_URL}/${projectId}`, {
+  const response = await fetch(`${API_URL}/projects/${projectId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export async function updateProject(projectId, projectData, token) {
 
 // 5. DELETE PROJECT
 export async function deleteProject(projectId, token) {
-  const response = await fetch(`${API_URL}/${projectId}`, {
+  const response = await fetch(`${API_URL}/projects/${projectId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

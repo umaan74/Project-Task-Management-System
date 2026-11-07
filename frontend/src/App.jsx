@@ -75,10 +75,27 @@ function OrganizationRequired() {
     Organizations,
     SelectedOrganization,
     isOrgLoading,
+    organizationError,
+    LoadOrganizations,
   } = useContext(OrganizationContext);
 
   if (isOrgLoading) {
     return <h2 className="p-5">Loading Organization...</h2>;
+  }
+
+  if (organizationError) {
+    return (
+      <div className="m-5 rounded-xl border border-red-200 bg-red-50 p-5 text-red-700">
+        <p>{organizationError}</p>
+        <button
+          type="button"
+          onClick={() => LoadOrganizations()}
+          className="mt-3 rounded-lg bg-blue-700 px-4 py-2 font-semibold text-white"
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   if (!Organizations || Organizations.length === 0) {
@@ -146,15 +163,6 @@ function App() {
           path="/organization-created"
           element={<Organi_Created />}
         />
-
-<Route
-  path="/projects/:projectId/add-members"
-  element={
-    role === "admin"
-      ? <Admin_Add_Project_Member />
-      : <Navigate to="/dashboard" replace />
-  }
-/>
 
         <Route
           path="/organization-joined"
@@ -294,7 +302,7 @@ function App() {
           {/* ADMIN-ONLY PROJECT ACTIONS */}
 
           <Route
-            path="/project/add-members"
+            path="/projects/:projectId/add-members"
             element={
               role === "admin"
                 ? <Admin_Add_Project_Member />
@@ -303,7 +311,7 @@ function App() {
           />
 
           <Route
-            path="/project/create-task"
+            path="/projects/:projectId/create-task"
             element={
               role === "admin"
                 ? <Admin_Create_Task />

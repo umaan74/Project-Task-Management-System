@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import OrganizationMember from "../models/organizationMember.model.js";
 import Project from "../models/project.model.js";
 import ProjectMember from "../models/projectMember.model.js";
@@ -8,9 +9,11 @@ export async function CreateTask(req, res) {
     const userId = req.user.userId;
     const projectId = req.params.projectId;
 
-    const Project_Exist = await Project.findOne({
-      _id: projectId,
-    });
+    if (!mongoose.isValidObjectId(projectId)) {
+      return res.status(400).json({ message: "Invalid project ID" });
+    }
+
+    const Project_Exist = await Project.findById(projectId);
 
     if (!Project_Exist) {
       return res.status(404).json({
@@ -26,27 +29,40 @@ export async function CreateTask(req, res) {
 
     if (!requested_user_isAdmin) {
       return res.status(403).json({
-        messsage:
+        message:
           "The requested user is not an admin of the Project/Organization",
       });
     }
 
     const { title, description, assignedTo, priority, dueDate } = req.body;
+    if (!title?.trim() || !mongoose.isValidObjectId(assignedTo)) {
+      return res.status(400).json({
+        message: "A task title and valid project member are required",
+      });
+    }
 
     const assigned_User_isProjectMember = await ProjectMember.findOne({
       userId: assignedTo,
       projectId: projectId,
-    });
+    }).populate("userId", "_id");
 
-    if (!assigned_User_isProjectMember) {
+    if (!assigned_User_isProjectMember?.userId) {
       return res.status(403).json({
-        messsage:
+        message:
           "The User You are trying to assign is not a member of this project",
       });
     }
 
+    if (!["low", "medium", "high", "urgent"].includes(priority)) {
+      return res.status(400).json({ message: "A valid task priority is required" });
+    }
+
+    if (!dueDate || Number.isNaN(new Date(dueDate).getTime())) {
+      return res.status(400).json({ message: "A valid task due date is required" });
+    }
+
     const NewTask = await Task.create({
-      title,
+      title: title.trim(),
       description,
       projectId,
       createdBy: userId,
@@ -56,13 +72,14 @@ export async function CreateTask(req, res) {
       status: "todo",
     });
 
-    res.status(201).json({
-      messsage: "New Task created Successfully",
+    return res.status(201).json({
+      message: "New Task created Successfully",
       NewTask,
     });
   } catch (error) {
-    res.json({
-      message: error,
+    console.error("CreateTask Error:", error);
+    return res.status(error.name === "ValidationError" ? 400 : 500).json({
+      message: error.name === "ValidationError" ? error.message : "Unable to create task",
     });
   }
 }
@@ -72,6 +89,10 @@ export async function GetProjectTasks(req, res) {
   try {
     const userId = req.user.userId;
     const projectId = req.params.projectId;
+
+    if (!mongoose.isValidObjectId(projectId)) {
+      return res.status(400).json({ message: "Invalid project ID" });
+    }
 
     // Check project exists
     const project = await Project.findById(projectId);
@@ -106,8 +127,8 @@ export async function GetProjectTasks(req, res) {
     const All_Tasks = await Task.find({
       projectId,
     })
-      .populate("assignedTo", "name email")
-      .populate("createdBy", "name email")
+      .populate("assignedTo", "username email")
+      .populate("createdBy", "username email")
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
@@ -130,9 +151,11 @@ export async function GetTask(req, res) {
     const userId = req.user.userId;
     const taskId = req.params.taskId;
 
-    const isTaskExist = await Task.findOne({
-      _id: taskId,
-    });
+    if (!mongoose.isValidObjectId(taskId)) {
+      return res.status(400).json({ message: "Invalid task ID" });
+    }
+
+    const isTaskExist = await Task.findById(taskId);
 
     if (!isTaskExist) {
       return res.status(404).json({
@@ -140,25 +163,38 @@ export async function GetTask(req, res) {
       });
     }
 
-    const projectId = isTaskExist.projectId;
+    const project = await Project.findById(isTaskExist.projectId);
+    if (!project) {
+      return res.status(404).json({ message: "Task project not found" });
+    }
 
-    const isProjectMember = await ProjectMember.findOne({
+    const isAdmin = await OrganizationMember.exists({
       userId,
-      projectId,
+      organizationId: project.organizationId,
+      role: "admin",
+    });
+    const isProjectMember = await ProjectMember.exists({
+      userId,
+      projectId: isTaskExist.projectId,
     });
 
-    if (!isProjectMember) {
+    if (!isAdmin && !isProjectMember) {
       return res.status(403).json({
-        message: "The user is not a Member of this Project",
+        message: "You are not authorized to view this task",
       });
     }
 
-    res.json({
+    const task = await Task.findById(taskId)
+      .populate("assignedTo", "username email")
+      .populate("createdBy", "username email");
+
+    return res.status(200).json({
       message: "The requested Task fetched Successfully",
-      isTaskExist,
+      isTaskExist: task,
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.error("GetTask Error:", error);
+    return res.status(500).json({ message: "Unable to fetch task" });
   }
 }
 
@@ -167,9 +203,11 @@ export async function UpdateTask(req, res) {
     const userId = req.user.userId;
     const taskId = req.params.taskId;
 
-    const isTaskExist = await Task.findOne({
-      _id: taskId,
-    });
+    if (!mongoose.isValidObjectId(taskId)) {
+      return res.status(400).json({ message: "Invalid task ID" });
+    }
+
+    const isTaskExist = await Task.findById(taskId);
 
     if (!isTaskExist) {
       return res.status(404).json({
@@ -177,37 +215,45 @@ export async function UpdateTask(req, res) {
       });
     }
 
-    const projectId = isTaskExist.projectId;
+    const project = await Project.findById(isTaskExist.projectId);
+    if (!project) {
+      return res.status(404).json({ message: "Task project not found" });
+    }
 
-    const isProjectMember = await ProjectMember.findOne({
+    const isAdmin = await OrganizationMember.exists({
       userId,
-      projectId,
+      organizationId: project.organizationId,
+      role: "admin",
+    });
+    const isProjectMember = await ProjectMember.exists({
+      userId,
+      projectId: isTaskExist.projectId,
     });
 
-    if (!isProjectMember) {
+    if (!isAdmin && !isProjectMember) {
       return res.status(403).json({
-        message: "The user is not a Member of this Project",
+        message: "You are not authorized to update this task",
       });
     }
     const status = req.body.status;
+    if (!["todo", "in-progress", "completed"].includes(status)) {
+      return res.status(400).json({ message: "Invalid task status" });
+    }
 
-    await Task.updateOne(
-      {
-        _id: taskId,
-      },
-      {
-        status: status,
-      },
-    );
-    const UpdatedTask = await Task.findOne({
-      _id: taskId,
-    });
-    res.json({
+    const UpdatedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { $set: { status } },
+      { new: true, runValidators: true }
+    )
+      .populate("assignedTo", "username email")
+      .populate("createdBy", "username email");
+    return res.status(200).json({
       message: "Task's Status Updated Successfully",
       UpdatedTask,
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.error("UpdateTask Error:", error);
+    return res.status(500).json({ message: "Unable to update task" });
   }
 }
 
@@ -223,9 +269,10 @@ export async function AssignTask(req, res) {
         message: "Target userId is required",
       });
     }
-    const isTaskExist = await Task.findOne({
-      _id: taskId,
-    });
+    if (!mongoose.isValidObjectId(taskId) || !mongoose.isValidObjectId(targetedUserId)) {
+      return res.status(400).json({ message: "Invalid task or user ID" });
+    }
+    const isTaskExist = await Task.findById(taskId);
 
     if (!isTaskExist) {
       return res.status(404).json({
@@ -258,31 +305,27 @@ export async function AssignTask(req, res) {
     const CheckProjectMember = await ProjectMember.findOne({
       userId: targetedUserId,
       projectId,
-    });
-    if (!CheckProjectMember) {
+    }).populate("userId", "_id");
+    if (!CheckProjectMember?.userId) {
       return res.status(403).json({
         message: "The targeted User is not a member of this Project",
       });
     }
-    await Task.updateOne(
-      {
-        _id: taskId,
-      },
-      {
-        assignedTo: targetedUserId,
-      },
-    );
+    const UpdatedAssignedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { $set: { assignedTo: targetedUserId } },
+      { new: true, runValidators: true }
+    )
+      .populate("assignedTo", "username email")
+      .populate("createdBy", "username email");
 
-    const UpdatedAssignedTask = await Task.findOne({
-      _id: taskId,
-    });
-
-    res.json({
+    return res.status(200).json({
       message: "Assigned Task to a Member successfully",
       UpdatedAssignedTask,
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.error("AssignTask Error:", error);
+    return res.status(500).json({ message: "Unable to assign task" });
   }
 }
 
@@ -292,9 +335,11 @@ export async function DeleteTask(req, res) {
     const userId = req.user.userId;
     const taskId = req.params.taskId;
 
-    const isTaskExist = await Task.findOne({
-      _id: taskId,
-    });
+    if (!mongoose.isValidObjectId(taskId)) {
+      return res.status(400).json({ message: "Invalid task ID" });
+    }
+
+    const isTaskExist = await Task.findById(taskId);
 
     if (!isTaskExist) {
       return res.status(404).json({
@@ -305,7 +350,6 @@ export async function DeleteTask(req, res) {
     const CurrentProject = await Project.findOne({
       _id: projectId,
     });
-    ;
     if (!CurrentProject) {
       return res.status(404).json({
         message: "The requested Project is not Exist",
@@ -329,10 +373,11 @@ export async function DeleteTask(req, res) {
       _id: taskId,
     });
 
-    res.json({
+    return res.status(200).json({
       message: "Task Deleted successfully",
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.error("DeleteTask Error:", error);
+    return res.status(500).json({ message: "Unable to delete task" });
   }
 }

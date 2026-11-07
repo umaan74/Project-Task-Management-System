@@ -1,26 +1,39 @@
-// Purpose: kaunsa user kis organization ka member hai aur us organization mein uska role kya hai.
-// OrganizationMember = User aur Organization ke beech relationship
+
 import mongoose from "mongoose";
 
-const organizationMember_Schema = new mongoose.Schema({
-  organizationId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "Organization",
+const organizationMember_Schema = new mongoose.Schema(
+  {
+    organizationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Organization",
+    },
+
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    role: {
+      type: String,
+      enum: ["admin", "member"],
+      default: "member",
+    },
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ["admin", "member"],
-  },
-});
+  {
+    timestamps: true,
+  }
+);
+
+organizationMember_Schema.index(
+  { organizationId: 1, userId: 1 },
+  { unique: true }
+);
+
 const OrganizationMember = mongoose.model(
   "OrganizationMember",
-  organizationMember_Schema,
+  organizationMember_Schema
 );
 
 export default OrganizationMember;

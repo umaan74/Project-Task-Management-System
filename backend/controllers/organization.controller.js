@@ -1,4 +1,5 @@
 
+import mongoose from "mongoose";
 import { InviteCodeGenerator } from "../utils/invitecode.utils.js";
 
 import Organization from "../models/organization.model.js";
@@ -66,7 +67,13 @@ export async function GetOrganizations(req, res) {
 
     const Organizations = await OrganizationMember.find({
       userId,
-    }).populate("organizationId");
+    }).populate({
+      path: "organizationId",
+      populate: {
+        path: "createdBy",
+        select: "username email",
+      },
+    });
 
     return res.status(200).json({
       message: "Organizations found successfully",
@@ -90,6 +97,10 @@ export async function GetOrganization(req, res) {
     const userId = req.user.userId;
     const organizationId = req.params.organizationId;
 
+    if (!mongoose.isValidObjectId(organizationId)) {
+      return res.status(400).json({ message: "Invalid organization ID" });
+    }
+
     const isMember = await OrganizationMember.findOne({
       userId,
       organizationId,
@@ -101,9 +112,8 @@ export async function GetOrganization(req, res) {
       });
     }
 
-    const OrganizationFound = await Organization.findById(
-      organizationId
-    );
+    const OrganizationFound = await Organization.findById(organizationId)
+      .populate("createdBy", "username email");
 
     if (!OrganizationFound) {
       return res.status(404).json({
@@ -133,6 +143,10 @@ export async function UpdateOrganization(req, res) {
     const userId = req.user.userId;
     const organizationId = req.params.organizationId;
     const newName = req.body.newName?.trim();
+
+    if (!mongoose.isValidObjectId(organizationId)) {
+      return res.status(400).json({ message: "Invalid organization ID" });
+    }
 
     if (!newName) {
       return res.status(400).json({
@@ -164,6 +178,7 @@ export async function UpdateOrganization(req, res) {
 
     OrganizationFound.name = newName;
     await OrganizationFound.save();
+    await OrganizationFound.populate("createdBy", "username email");
 
     return res.status(200).json({
       message: "Organization updated successfully",
@@ -186,6 +201,10 @@ export async function DeleteOrganization(req, res) {
   try {
     const userId = req.user.userId;
     const organizationId = req.params.organizationId;
+
+    if (!mongoose.isValidObjectId(organizationId)) {
+      return res.status(400).json({ message: "Invalid organization ID" });
+    }
 
     const requesterIsAdmin = await OrganizationMember.findOne({
       userId,

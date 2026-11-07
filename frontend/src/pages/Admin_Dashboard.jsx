@@ -21,7 +21,7 @@ import { getProjectTasks } from "../services/taskService";
 const Admin_Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const { AccessToken } = useContext(AuthContext);
+  const { AccessToken, CurrentUser } = useContext(AuthContext);
 
   const { SelectedOrganization } = useContext(OrganizationContext);
 
@@ -32,6 +32,7 @@ const Admin_Dashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
 
   const organizationId = SelectedOrganization?.organizationId?._id;
   const organizationName = SelectedOrganization?.organizationId?.name;
@@ -67,32 +68,30 @@ const Admin_Dashboard = () => {
 
         if (!isMounted) return;
 
-        setProjects(projectList);
+        const validProjects = Array.isArray(projectList) ? projectList : [];
+        setProjects(validProjects);
 
         // Fetch tasks from all projects
         const taskResponses = await Promise.all(
-          projectList.map(async (project) => {
-            try {
-              const result = await getProjectTasks(
-                project._id,
-                AccessToken
-              );
-
-              if (!result.response.ok) {
-                return [];
-              }
-
-              return result.data.All_Tasks || [];
-            } catch (error) {
-              console.log("Task fetch error:", error);
-              return [];
-            }
-          })
+          validProjects.map((project) =>
+            getProjectTasks(project._id, AccessToken)
+          )
         );
+
+        const failedTaskResult = taskResponses.find(
+          (result) => !result.response.ok
+        );
+        if (failedTaskResult) {
+          throw new Error(
+            failedTaskResult.data.message || "Unable to fetch project tasks"
+          );
+        }
 
         if (!isMounted) return;
 
-        const allTasks = taskResponses.flat();
+        const allTasks = taskResponses.flatMap(
+          (result) => result.data.All_Tasks || []
+        );
 
         // Count incomplete tasks
         const activeTaskCount = allTasks.filter((task) => {
@@ -123,7 +122,7 @@ const Admin_Dashboard = () => {
     return () => {
       isMounted = false;
     };
-  }, [AccessToken, organizationId]);
+  }, [AccessToken, organizationId, reloadKey]);
 
   // DASHBOARD CALCULATIONS
   const CompletedProjects = Projects.filter(
@@ -188,7 +187,7 @@ const Admin_Dashboard = () => {
           <div className="left-panel w-[60%] ml-4">
 
             <h1 className="font-bold text-2xl lg:text-4xl lg:mb-2">
-              Welcome back, Admin
+              Welcome back, {CurrentUser?.username || "Admin"}
             </h1>
 
             <p className="text-gray-400">
@@ -218,7 +217,7 @@ const Admin_Dashboard = () => {
             {error}
 
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => setReloadKey((key) => key + 1)}
               className="underline ml-2 font-semibold"
             >
               Retry
@@ -334,7 +333,7 @@ const Admin_Dashboard = () => {
               </button>
 
               <button
-                onClick={() => navigate("/projects")}
+                onClick={() => navigate("/project/create")}
                 className="flex cursor-pointer items-center gap-1.5 px-3 py-2 text-sm bg-blue-700 text-white font-semibold rounded-md whitespace-nowrap"
               >
                 <span className="text-lg leading-none">+</span>
@@ -369,7 +368,7 @@ const Admin_Dashboard = () => {
                 </p>
 
                 <button
-                  onClick={() => navigate("/projects")}
+                  onClick={() => navigate("/project/create")}
                   className="bg-blue-700 text-white px-4 py-2 rounded-md mt-4"
                 >
                   Create Project

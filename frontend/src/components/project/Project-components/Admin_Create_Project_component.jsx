@@ -203,6 +203,7 @@ const Admin_Create_Project_component = () => {
               type="date"
               value={formData.startDate}
               onChange={handleChange}
+              required
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
@@ -222,6 +223,7 @@ const Admin_Create_Project_component = () => {
               value={formData.dueDate}
               onChange={handleChange}
               min={formData.startDate || undefined}
+              required
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>

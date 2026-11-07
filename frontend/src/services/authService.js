@@ -8,6 +8,7 @@ export async function registerUser(username, email, password) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ username, email, password }),
   });
 

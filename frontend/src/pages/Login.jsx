@@ -5,10 +5,10 @@ import { AuthContext } from "../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { Login: login } = useContext(AuthContext);
+  const { Login: login, authError } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(authError || "");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,17 +21,17 @@ const Login = () => {
     try {
       setLoading(true);
 
-      const isLogin = await login(username, password);
+      const result = await login(username, password);
 
-      if (isLogin) {
+      if (result.ok) {
         form.reset();
         navigate("/dashboard");
       } else {
-        setMessage("Invalid Username or Password!");
+        setMessage(result.message || "Unable to login.");
       }
 
     } catch (error) {
-      setMessage("Something went wrong. Please try again.");
+      setMessage(error.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -90,9 +90,9 @@ const Login = () => {
             />
           </div>
 
-          {message && (
+          {(message || authError) && (
             <p className="text-red-500 text-sm my-2">
-              {message}
+              {message || authError}
             </p>
           )}
 

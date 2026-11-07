@@ -80,6 +80,8 @@ const Member_Single_ProjectTasks_Members = ({ projectId }) => {
     }
 
     return (
+      member?.userId?.username ||
+      member?.username ||
       member?.name ||
       member?.userId?.name ||
       member?.email ||
@@ -100,6 +102,7 @@ const Member_Single_ProjectTasks_Members = ({ projectId }) => {
     }
 
     return (
+      assignedTo.username ||
       assignedTo.name ||
       assignedTo.email ||
       "Assigned member"

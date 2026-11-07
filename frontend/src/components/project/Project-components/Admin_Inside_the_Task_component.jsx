@@ -39,6 +39,12 @@ const Admin_Inside_Task_component = ({ projectId, taskId }) => {
           );
         }
 
+        if (!memberResult.response.ok) {
+          throw new Error(
+            memberResult.data.message || "Unable to load project members."
+          );
+        }
+
         const taskData =
           taskResult.data.isTaskExist ||
           taskResult.data.Task ||
@@ -83,6 +89,8 @@ const Admin_Inside_Task_component = ({ projectId, taskId }) => {
 
     return (
       member?.name ||
+      member?.username ||
+      member?.userId?.username ||
       member?.userId?.name ||
       member?.email ||
       member?.userId?.email ||
@@ -94,7 +102,7 @@ const Admin_Inside_Task_component = ({ projectId, taskId }) => {
     if (!person) return "Not available";
     if (typeof person === "string") return `User ${person.slice(-6)}`;
 
-    return person.name || person.email || "User";
+    return person.username || person.name || person.email || "User";
   };
 
   const formatDate = (date) => {

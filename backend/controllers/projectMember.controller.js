@@ -1,7 +1,9 @@
 
+import mongoose from "mongoose";
 import OrganizationMember from "../models/organizationMember.model.js";
 import Project from "../models/project.model.js";
 import ProjectMember from "../models/projectMember.model.js";
+import Task from "../models/task.model.js";
 
 
 export async function AddProjectMember(req, res) {
@@ -10,7 +12,13 @@ export async function AddProjectMember(req, res) {
     const projectId = req.params.projectId;
     const targetedUserId = req.body.userId;
 
-    if (!targetedUserId) {
+    if (!mongoose.isValidObjectId(projectId)) {
+      return res.status(400).json({
+        message: "Invalid project ID",
+      });
+    }
+
+    if (!mongoose.isValidObjectId(targetedUserId)) {
       return res.status(400).json({
         message: "Please select a member",
       });
@@ -42,11 +50,11 @@ export async function AddProjectMember(req, res) {
     const targetMember = await OrganizationMember.findOne({
       userId: targetedUserId,
       organizationId: project.organizationId,
-    });
+    }).populate("userId", "_id");
 
-    if (!targetMember) {
+    if (!targetMember?.userId) {
       return res.status(403).json({
-        message: "Selected user does not belong to this organization",
+        message: "Selected user is not a valid member of this organization",
       });
     }
 
@@ -92,64 +100,84 @@ export async function AddProjectMember(req, res) {
 }
     
 
-
 export async function GetProjectMembers(req, res) {
   try {
     const userId = req.user.userId;
     const projectId = req.params.projectId;
 
-    const requestedProject = await Project.findById(projectId);
+    if (!mongoose.isValidObjectId(projectId)) {
+      return res.status(400).json({
+        message: "Invalid project ID",
+      });
+    }
 
-    if (!requestedProject) {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
       return res.status(404).json({
         message: "Project not found",
       });
     }
 
-    const requesterIsAdmin = await OrganizationMember.findOne({
+    const isAdmin = await OrganizationMember.findOne({
       userId,
-      organizationId: requestedProject.organizationId,
+      organizationId: project.organizationId,
       role: "admin",
     });
 
-    const requesterIsProjectMember = await ProjectMember.findOne({
+    const isProjectMember = await ProjectMember.findOne({
       userId,
       projectId,
     });
 
-    if (!requesterIsAdmin && !requesterIsProjectMember) {
+    if (!isAdmin && !isProjectMember) {
       return res.status(403).json({
         message: "You don't have permission to view Project Members",
       });
     }
 
-    const Project_Members = await ProjectMember.find({
-      projectId,
-    })
+    const organizationUserIds = new Set(
+      (await OrganizationMember.distinct("userId", {
+        organizationId: project.organizationId,
+      })).map(String)
+    );
+
+    const Project_Members = (await ProjectMember.find({ projectId })
       .populate("userId", "username email")
-      .populate("assignedBy", "username email");
+      .populate("assignedBy", "username email"))
+      .filter(
+        (member) =>
+          member.userId &&
+          organizationUserIds.has(String(member.userId._id))
+      );
 
     return res.status(200).json({
-      message: "All project members fetched successfully",
+      message: "Project members fetched successfully",
       Project_Members,
     });
-
   } catch (error) {
-    console.error("GetProjectMembers:", error);
+    console.error("GetProjectMembers Error:", error);
 
     return res.status(500).json({
-      message: "Unable to fetch project members",
-      error: error.message,
+      message: "Failed to fetch project members",
     });
   }
 }
-
 
 export async function RemoveProjectMember(req, res) {
   try {
     const userId = req.user.userId;
     const projectId = req.params.projectId;
     const targetUserId = req.params.userId;
+
+    if (
+      !mongoose.isValidObjectId(projectId) ||
+      !mongoose.isValidObjectId(targetUserId)
+    ) {
+      return res.status(400).json({
+        message: "Invalid project or user ID",
+      });
+    }
 
     const requestedProject = await Project.findById(projectId);
 
@@ -181,6 +209,11 @@ export async function RemoveProjectMember(req, res) {
         message: "Member is not assigned to this project",
       });
     }
+
+    await Task.updateMany(
+      { projectId, assignedTo: targetUserId },
+      { $set: { assignedTo: null } }
+    );
 
     await ProjectMember.deleteOne({
       userId: targetUserId,

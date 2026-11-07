@@ -12,6 +12,11 @@ function OrganizationSelection() {
 
   const navigate = useNavigate();
 
+  // Ignore records whose organization no longer exists
+  const validOrganizations = Organizations.filter(
+    (item) => item?.organizationId?._id && item?.organizationId?.name
+  );
+
   function handleSelect(organization) {
     SelectOrganization(organization);
     navigate("/dashboard");
@@ -33,21 +38,27 @@ function OrganizationSelection() {
         </p>
 
         <div className="space-y-4">
-          {Organizations.map((item) => (
-            <button
-              key={item.organizationId._id}
-              onClick={() => handleSelect(item)}
-              className="w-full border rounded-lg p-5 text-left hover:border-blue-500 hover:bg-blue-50 transition"
-            >
-              <h2 className="text-lg font-semibold">
-                {item.organizationId.name}
-              </h2>
+          {validOrganizations.length > 0 ? (
+            validOrganizations.map((item) => (
+              <button
+                key={item.organizationId._id}
+                onClick={() => handleSelect(item)}
+                className="w-full border rounded-lg p-5 text-left hover:border-blue-500 hover:bg-blue-50 transition"
+              >
+                <h2 className="text-lg font-semibold">
+                  {item.organizationId.name}
+                </h2>
 
-              <p className="text-sm text-gray-500 mt-1">
-                Role: {item.role}
-              </p>
-            </button>
-          ))}
+                <p className="text-sm text-gray-500 mt-1">
+                  Role: {item.role}
+                </p>
+              </button>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">
+              No valid organizations found. Please create or join an organization.
+            </p>
+          )}
         </div>
       </div>
     </div>

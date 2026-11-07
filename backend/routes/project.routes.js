@@ -27,25 +27,9 @@ ProjectRoute.get(
   GetProjects
 );
 
-// Get single project
-ProjectRoute.get(
-  "/:projectId",
-  AuthMiddleware,
-  GetSingleProject
-);
+ProjectRoute.get("/projects/:projectId", AuthMiddleware, GetSingleProject);
 
-// Update project
-ProjectRoute.patch(
-  "/:projectId",
-  AuthMiddleware,
-  UpdateProject
-);
+ProjectRoute.patch("/projects/:projectId", AuthMiddleware, UpdateProject);
 
-// Delete project
-ProjectRoute.delete(
-  "/:projectId",
-  AuthMiddleware,
-  DeleteProject
-);
-
+ProjectRoute.delete("/projects/:projectId", AuthMiddleware, DeleteProject);
 export default ProjectRoute;

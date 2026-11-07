@@ -61,6 +61,20 @@ function generateRefreshToken(user) {
   );
 }
 
+async function findSessionForRefreshToken(userId, refreshToken) {
+  const activeSessions = await Session.find({
+    userId,
+    revoked: false,
+  });
+
+  for (const session of activeSessions) {
+    if (await bcrypt.compare(refreshToken, session.refreshTokenHash)) {
+      return session;
+    }
+  }
+
+  return null;
+}
 
 // REGISTER
 export async function Register(req, res) {
@@ -115,10 +129,21 @@ export async function Register(req, res) {
     });
 
     const safeUser = await User.findById(user._id).select("-password");
+    const AccessToken = generateAccessToken(user);
+    const RefreshToken = generateRefreshToken(user);
+    const refreshTokenHash = await bcrypt.hash(RefreshToken, 10);
+
+    await Session.create({
+      userId: user._id,
+      refreshTokenHash,
+    });
+
+    res.cookie("refreshToken", RefreshToken, getCookieOptions());
 
     return res.status(201).json({
       message: "User registered successfully",
       user: safeUser,
+      AccessToken,
     });
 
   } catch (error) {
@@ -220,25 +245,14 @@ export async function Refresh(req, res) {
       });
     }
 
-    const userSession = await Session.findOne({
-      userId: decoded.userId,
-      revoked: false,
-    });
+    const userSession = await findSessionForRefreshToken(
+      decoded.userId,
+      RefreshToken
+    );
 
     if (!userSession) {
       return res.status(401).json({
         message: "Session not found or expired",
-      });
-    }
-
-    const isRefreshTokenValid = await bcrypt.compare(
-      RefreshToken,
-      userSession.refreshTokenHash
-    );
-
-    if (!isRefreshTokenValid) {
-      return res.status(401).json({
-        message: "Refresh token is not valid",
       });
     }
 
@@ -261,8 +275,20 @@ export async function Refresh(req, res) {
       10
     );
 
-    userSession.refreshTokenHash = NewRefreshTokenHash;
-    await userSession.save();
+    const updateResult = await Session.updateOne(
+      {
+        _id: userSession._id,
+        refreshTokenHash: userSession.refreshTokenHash,
+        revoked: false,
+      },
+      { $set: { refreshTokenHash: NewRefreshTokenHash } }
+    );
+
+    if (updateResult.modifiedCount !== 1) {
+      return res.status(401).json({
+        message: "Refresh token has already been used",
+      });
+    }
 
     res.cookie(
       "refreshToken",
@@ -317,22 +343,19 @@ export async function Logout(req, res) {
       });
     }
 
-    const userSession = await Session.findOne({
-      userId: decoded.userId,
-      revoked: false,
-    });
-
-    if (userSession) {
-      const isValid = await bcrypt.compare(
-        RefreshToken,
-        userSession.refreshTokenHash
-      );
-
-      if (isValid) {
-        userSession.revoked = true;
-        await userSession.save();
-      }
+    const userSession = await findSessionForRefreshToken(
+      decoded.userId,
+      RefreshToken
+    );
+    if (!userSession) {
+      res.clearCookie("refreshToken", getClearCookieOptions());
+      return res.status(401).json({
+        message: "Refresh token is not valid",
+      });
     }
+
+    userSession.revoked = true;
+    await userSession.save();
 
     res.clearCookie(
       "refreshToken",
@@ -380,25 +403,14 @@ export async function LogoutAll(req, res) {
       });
     }
 
-    const userSession = await Session.findOne({
-      userId: decoded.userId,
-      revoked: false,
-    });
+    const userSession = await findSessionForRefreshToken(
+      decoded.userId,
+      RefreshToken
+    );
 
     if (!userSession) {
       return res.status(401).json({
         message: "Session not found",
-      });
-    }
-
-    const isValid = await bcrypt.compare(
-      RefreshToken,
-      userSession.refreshTokenHash
-    );
-
-    if (!isValid) {
-      return res.status(401).json({
-        message: "Refresh token is not valid",
       });
     }
 
